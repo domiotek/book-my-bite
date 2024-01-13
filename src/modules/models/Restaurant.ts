@@ -9,18 +9,18 @@ export default class Restaurant {
     private menu: Menu;
     private foodtype: Foodtype;
     private address: Address;
-    private tablemap: object;
     private image: string;
+    private tablemap: object;
 
-    constructor(id: number, name: string, description: string, menu: Menu, foodtype: Foodtype, address: Address, tablemap: object, image: string) {
+    constructor(id: number, name: string, description: string, menu: Menu, foodtype: Foodtype, address: Address, image: string, tablemap: object) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.menu = menu;
         this.foodtype = foodtype;
         this.address = address;
-        this.tablemap = tablemap;
         this.image = image;
+        this.tablemap = tablemap;
     }
 
     public getID(): number {
@@ -67,15 +67,19 @@ export default class Restaurant {
         this.menu = menu;
     }
 
-    public setFoodtype(foodtype: Foodtype): void {
-        this.foodtype = foodtype;
+    public setFoodtype(foodType: Foodtype): void {
+        this.foodtype = foodType;
     }
 
     public setAddress(address: Address): void {
         this.address = address;
     }
 
-    public setTablemap(tablemap: object): void {
-        this.tablemap = tablemap;
+    public setTablemap(tableMap: object): void {
+        this.tablemap = tableMap;
+    }
+
+    public setImage(image: string): void {
+        this.image = image;
     }
 }

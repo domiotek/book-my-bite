@@ -10,9 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-// Define your models here
-
 model country {
   country_id    Int       @id @default(autoincrement())
   name          String    @db.VarChar(40) @unique
@@ -106,7 +103,7 @@ model table {
   table_name         String   @db.VarChar(30)
   description        String   @db.VarChar(255)
   max_clients_number Int
-  restaurant         restaurant @relation(fields: [restaurant_id], references: [restaurant_id])
+  restaurant         restaurant @relation(fields: [restaurant_id], references: [restaurant_id], onDelete: Cascade)
   bookings           booking[]
 }
 
