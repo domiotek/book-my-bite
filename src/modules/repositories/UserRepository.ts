@@ -4,7 +4,7 @@ import User from "../models/User.js";
 export default class UserRepository {
 
     public async getUserByID(id: number) {
-        const result= await global.app.orm.user.findUnique({
+        const userRecord= await global.app.orm.user.findUnique({
             include: {
                 role: true
             },
@@ -13,17 +13,16 @@ export default class UserRepository {
             }
         });
 
-        if (!result) {
+        if (!userRecord) {
             return null;
         }
 
-        const role= new Role(result.role.role_id, result.role.name);
-
-        return new User(result.user_id, result.email, result.password_hash, result.name, result.surname, result.phone, role);
+        const role= new Role(userRecord.role.role_id, userRecord.role.name);
+        return new User(userRecord.user_id, userRecord.email, userRecord.password_hash, userRecord.name, userRecord.surname, userRecord.phone, role);
     }
 
     public async getUserByEmail(email: string) {
-        const result= await global.app.orm.user.findUnique({
+        const userRecord= await global.app.orm.user.findUnique({
             include: {
                 role: true
             },
@@ -32,13 +31,12 @@ export default class UserRepository {
             }
         })
 
-        if (!result) {
+        if (!userRecord) {
             return null;
         }
 
-        const role= new Role(result.role.role_id, result.role.name);
-
-        return new User(result.user_id, result.email, result.password_hash, result.name, result.surname, result.phone, role);
+        const role= new Role(userRecord.role.role_id, userRecord.role.name);
+        return new User(userRecord.user_id, userRecord.email, userRecord.password_hash, userRecord.name, userRecord.surname, userRecord.phone, role);
     }
 
     public async createUser(user: User) {

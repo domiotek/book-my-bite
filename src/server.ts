@@ -46,7 +46,6 @@ export default class App {
             if(!content) res.send("<h2>Error 500</h2><p>Website entry file couldn't be located. Has the website been built yet?</p>");
             else res.send(content); 
         });
-
         
     }
 

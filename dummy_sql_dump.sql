@@ -26,17 +26,17 @@ INSERT INTO foodtype (name) VALUES ('Italian'), ('Mexican'), ('Chinese'), ('Japa
 
 INSERT INTO menu (url) VALUES ('http://menu1.com'), ('http://menu2.com'), ('http://menu3.com'), ('http://menu4.com'), ('http://menu5.com');
 
-INSERT INTO restaurant (name, description, menu_id, foodtype_id, address_id) VALUES 
-('Restaurant 1', 'A cozy place for dining', 1, 1, 1),
-('Restaurant 2', 'A cozy place for dining', 2, 2, 2),
-('Restaurant 3', 'A cozy place for dining', 3, 3, 3),
-('Restaurant 4', 'A cozy place for dining', 4, 4, 4),
-('Restaurant 5', 'A cozy place for dining', 5, 5, 5),
-('Restaurant 6', 'A cozy place for dining', 1, 1, 6),
-('Restaurant 7', 'A cozy place for dining', 2, 2, 7),
-('Restaurant 8', 'A cozy place for dining', 3, 3, 8),
-('Restaurant 9', 'A cozy place for dining', 4, 4, 9),
-('Restaurant 10', 'A cozy place for dining', 5, 5, 10);
+INSERT INTO restaurant (name, description, menu_id, foodtype_id, address_id, image) VALUES
+('Restaurant 1', 'A cozy place for dining', 1, 1, 1, 'image_path'),
+('Restaurant 2', 'A cozy place for dining', 2, 2, 2, 'image_path'),
+('Restaurant 3', 'A cozy place for dining', 3, 3, 3, 'image_path'),
+('Restaurant 4', 'A cozy place for dining', 4, 4, 4, 'image_path'),
+('Restaurant 5', 'A cozy place for dining', 5, 5, 5, 'image_path'),
+('Restaurant 6', 'A cozy place for dining', 1, 1, 6, 'image_path'),
+('Restaurant 7', 'A cozy place for dining', 2, 2, 7, 'image_path'),
+('Restaurant 8', 'A cozy place for dining', 3, 3, 8, 'image_path'),
+('Restaurant 9', 'A cozy place for dining', 4, 4, 9, 'image_path'),
+('Restaurant 10', 'A cozy place for dining', 5, 5, 10, 'image_path');
 
 INSERT INTO "table" (restaurant_id, table_name, description, max_clients_number) VALUES 
 (1, 'Table 1-1', 'Near the window', 4),
