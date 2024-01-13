@@ -9,6 +9,15 @@ import { PrismaClient } from "@prisma/client";
 import fs from "fs/promises"
 import Output from "./modules/Output.js";
 import env from "./env.js";
+import RestaurantRepository from "./modules/repositories/RestaurantRepository.js";
+import Menu from "./modules/models/Menu.js";
+import Foodtype from "./modules/models/Foodtype.js";
+import Address from "./modules/models/Address.js";
+import Voivodeship from "./modules/models/Voivodeship.js";
+import Country from "./modules/models/Country.js";
+import City from "./modules/models/City.js";
+import Restaurant from "./modules/models/Restaurant.js";
+
 
 
 export default class App {
@@ -46,7 +55,6 @@ export default class App {
             if(!content) res.send("<h2>Error 500</h2><p>Website entry file couldn't be located. Has the website been built yet?</p>");
             else res.send(content); 
         });
-
         
     }
 

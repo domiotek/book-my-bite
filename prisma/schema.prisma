@@ -83,6 +83,7 @@ model restaurant {
   menu_id       Int
   foodtype_id   Int
   address_id    Int
+  image         String    @db.VarChar(255)
   table_map     Json?
   menu          menu      @relation(fields: [menu_id], references: [menu_id])
   foodtype      foodtype  @relation(fields: [foodtype_id], references: [foodtype_id])

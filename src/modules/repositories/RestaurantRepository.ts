@@ -1,41 +1,45 @@
-import Address from "../models/Address";
-import City from "../models/City";
-import Foodtype from "../models/Foodtype";
-import Menu from "../models/Menu";
-import Restaurant from "../models/Restaurant";
+import Restaurant from "../models/Restaurant.js";
+import Address from "../models/Address.js";
+import Foodtype from "../models/Foodtype.js";
+import Menu from "../models/Menu.js";
+import City from "../models/City.js";
 
 interface IRestaurantFilterOptions {
-    city?: City
-    name?: string
-    foodType?: Foodtype
+    city?: City;
+    name?: string;
+    foodType?: Foodtype;
 }
 
 export default class RestaurantRepository {
 
-
+    // Get a single restaurant by ID
     public async getRestaurantByID(ID: number) {
-
-        // const restaurant = await global.app.orm.restaurant.findUnique({where: {restaurant_id: ID}, include: {foodtype: true, address: {include: {city: {include: {voivodeship: {include: {country: true}}}}}}}});
-        
+        const result = await global.app.orm.restaurant.findUnique({
+            where: {
+                restaurant_id: ID,
+            },
+            include: {
+                foodtype: true,
+                address: true,
+            },
+        });
+        if (!result) {
+            return null;
+        }
+        return result;
     }
 
-    public async getRestaurants(filters: IRestaurantFilterOptions) {
-
-    }
-
-    public getRestaurantsByFoodType(foodType: Foodtype) {
-        return this.getRestaurants({foodType});
-    }
-
-    public async createRestaurant(name: string, description: string, menu: Menu, foodtype: Foodtype, address: Address, tableMap: object) {
-        
-    }
-
-    public async deleteRestaurant(restaurant: Restaurant) {
-        
-    }
-
-    public async updateRestaurant(restaurant: Restaurant) {
-
+    // Create a new restaurant
+    public async createRestaurant(restaurant: Restaurant) {
+        return await global.app.orm.restaurant.create({
+            data:{
+                name: restaurant.getName(),
+                description: restaurant.getDescription(),
+                menu_id: restaurant.getMenu().getID(),
+                foodtype_id: restaurant.getFoodtype().getID(),
+                address_id: restaurant.getAddress().getID(),
+                table_map: restaurant.getTablemap(),
+            }
+        });
     }
 }
