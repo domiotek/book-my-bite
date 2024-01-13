@@ -36,6 +36,7 @@
     "css-loader": "^6.7.1",
     "fastify": "^4.22.2",
     "html-webpack-plugin": "^5.5.0",
+    "luxon": "^3.4.4",
     "mkdirp": "^3.0.1",
     "ncp": "^2.0.0",
     "pg": "^8.11.3",
@@ -53,6 +54,7 @@
     "webpack": "^5.73.0"
   },
   "devDependencies": {
+    "@types/luxon": "^3.4.0",
     "@types/mysql": "^2.15.21",
     "@types/nodemailer": "^6.4.10",
     "@types/react": "^18.0.15",
