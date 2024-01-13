@@ -113,8 +113,7 @@ model booking {
   booking_id Int      @id @default(autoincrement())
   user_id    Int
   table_id   Int
-  date       DateTime
-  hour       DateTime
+  datetime   DateTime
   user       user @relation(fields: [user_id], references: [user_id])
   table      table @relation(fields: [table_id], references: [table_id])
 }
