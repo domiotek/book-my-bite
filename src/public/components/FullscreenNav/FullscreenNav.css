@@ -1,0 +1,51 @@
+.FullscreenNav {
+    position: fixed;
+    top: 5rem;
+    height: 100%;
+    background: white;
+    width: 100%;
+    left: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 3em;
+    transition: left 0.4s;
+}
+
+.FullscreenNav.Shown {
+    left: 0;
+}
+
+.FullscreenNav a {
+    padding: 1em 0;
+    text-decoration: none;
+    position: relative;
+    width: 80%;
+    text-align: center;
+    color: black;
+    transition: background 0.4s;
+}
+
+.FullscreenNav a:hover {
+    background-color: #f1f1f1;
+}
+
+
+.FullscreenNav a::after {
+    content: "";
+    width: 90%;
+    height: 2px;
+    background-color: #e2e4f0;
+    margin: auto;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+}
+
+@media screen and (min-width: 769px){
+    .FullscreenNav {
+        display: none;
+    }
+}
