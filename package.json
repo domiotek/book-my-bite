@@ -16,7 +16,8 @@
     "start-dev-full": "cross-env NODE_ENV=development concurrently \"tsc --watch\" \"webpack --watch --mode development\" \"nodemon --inspect=5858 dist/server.js\"",
     "just-start-dev": "cross-env NODE_ENV=development node dist/server.js",
     "start": "cross-env NODE_ENV=production node dist/server.js",
-    "analyze-webpack-bundles": "webpack --profile --json > stats.json && webpack-bundle-analyzer stats.json"
+    "analyze-webpack-bundles": "webpack --profile --json > stats.json && webpack-bundle-analyzer stats.json",
+    "start-auto-build": "tsc --watch"
   },
   "license": "ISC",
   "dependencies": {
