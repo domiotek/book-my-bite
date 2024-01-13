@@ -10,14 +10,13 @@ import fs from "fs/promises"
 import Output from "./modules/Output.js";
 import env from "./env.js";
 import RestaurantRepository from "./modules/repositories/RestaurantRepository.js";
+import Restaurant from "./modules/models/Restaurant.js";
 import Menu from "./modules/models/Menu.js";
 import Foodtype from "./modules/models/Foodtype.js";
 import Address from "./modules/models/Address.js";
+import City from "./modules/models/City.js";
 import Voivodeship from "./modules/models/Voivodeship.js";
 import Country from "./modules/models/Country.js";
-import City from "./modules/models/City.js";
-import Restaurant from "./modules/models/Restaurant.js";
-
 
 
 export default class App {
@@ -55,6 +54,7 @@ export default class App {
             if(!content) res.send("<h2>Error 500</h2><p>Website entry file couldn't be located. Has the website been built yet?</p>");
             else res.send(content); 
         });
+
         
     }
 
@@ -66,6 +66,17 @@ export default class App {
         if(state) {
             Output.init().fg("yellow").print(`Server started at ${env.LISTEN_HOST}:${env.LISTEN_PORT}`);
         }
+
+        const restaurantRepository = new RestaurantRepository();
+        const menu = new Menu(1, "abc");
+        const foodType = new Foodtype(1, "abc");
+        const country = new Country(1, "abc");
+        const voivodeship = new Voivodeship(1, "abc", country);
+        const city = new City(1, "abc", voivodeship);
+        const address = new Address(1, city, "abc", 10, "abc");
+        const restaurant = new Restaurant(7, "aa", "aa", menu, foodType, address, "abc", {});
+        const result = await restaurantRepository.getRestaurants({city: city});
+        let a = 10;
     }
 }
 

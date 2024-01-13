@@ -7,13 +7,13 @@ export default class Address {
     private buildingNumber: number;
     private zipCode: string;
 
-    constructor(id: number, city: City, zipCode: string, streetName: string, buildingNumber: number) {
+    constructor(id: number, city: City, streetName: string, buildingNumber: number, zipCode: string) {
         this.id = id;
         this.streetName = streetName;
         this.city = city;
-        this.zipCode = zipCode;
         this.streetName = streetName;
         this.buildingNumber = buildingNumber;
+        this.zipCode = zipCode;
     }
 
     public getID(): number {
