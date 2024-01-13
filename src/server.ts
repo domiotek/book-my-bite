@@ -9,15 +9,6 @@ import { PrismaClient } from "@prisma/client";
 import fs from "fs/promises"
 import Output from "./modules/Output.js";
 import env from "./env.js";
-import RestaurantRepository from "./modules/repositories/RestaurantRepository.js";
-import Menu from "./modules/models/Menu.js";
-import Foodtype from "./modules/models/Foodtype.js";
-import Address from "./modules/models/Address.js";
-import Voivodeship from "./modules/models/Voivodeship.js";
-import Country from "./modules/models/Country.js";
-import City from "./modules/models/City.js";
-import Restaurant from "./modules/models/Restaurant.js";
-
 
 
 export default class App {
