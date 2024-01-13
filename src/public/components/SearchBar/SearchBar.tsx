@@ -23,11 +23,11 @@ export default function SearchBar() {
 
     return (
         <div className={classes.searchBar}>
-            <h2>Zarezerwuj stolik w restauracji</h2>
+            <h2>Zarezerwuj stolik</h2>
             <div className={classes.searchFilter}>
                 <div className={classes.element}>
                     <img src={locationImg} alt="location" />
-                    <select name="location" id="location">
+                    <select name="location" id="location" title="Lokalizacja">
                         <option value="">Lokalizacja</option>
                         {
                             mockLocations.map((location) => (
@@ -42,7 +42,7 @@ export default function SearchBar() {
                 </div>
                 <div className={classes.element}>
                     <img src={foodtypeImg} alt="foodtype" />
-                    <select name="location" id="location">
+                    <select name="foodtype" id="foodtype" title="Kategoria">
                         <option value="">Kategoria</option>
                         {
                             mockFoodTypes.map((foodtype) => (

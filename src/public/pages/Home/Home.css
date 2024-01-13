@@ -1,0 +1,43 @@
+.HomePage {
+    padding-top: 5em;
+}
+
+.CuisineWrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: auto;
+    margin-top: 5em;
+}
+
+.CuisinePanel {
+    width: 100%;
+    background: var(--purple-color-1);
+    color: white;
+    padding: 1em 2em;
+    display: flex;
+    align-items: center;
+    border-radius: 1.5em;
+    justify-content: space-between;
+    margin: 0.5em auto;
+    max-width: 550px;
+    cursor: pointer;
+}
+
+.CuisinePanel > h2 {
+    font-weight: 500;
+    font-size: 1em;
+}
+
+.CuisinePanel > img {
+    width: 30%;
+    max-width: 125px;
+    clip-path: circle(45%);
+}
+
+@media screen and (min-width: 426px) {
+    .CuisinePanel > h2 {
+        font-size: 1.5em;
+    }
+}
