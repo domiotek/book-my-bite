@@ -1,0 +1,101 @@
+.searchBar {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    padding: 0.5em 1em;
+    background-color: var(--purple-color-2);
+    color: white;
+    margin: auto;
+    border-radius: 1.5em;
+}
+
+.searchBar .searchFilter {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 1em;
+    border-radius: 1.5em;
+    gap: 0.5em;
+    margin: 1em 0;
+}
+
+.searchBar .searchFilter .element {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 25%;
+    position: relative;
+    flex: 1;
+}
+
+.searchBar .searchFilter .element img {
+    width: 36px;
+    margin-right: 1em;
+}
+
+.searchBar .searchFilter .element select {
+    border: none;
+    font-size: 1em;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+}
+
+.searchBar .searchFilter .element input {
+    border: none;
+    width: 100%;
+    line-height: 1em;
+    font-size: 1em;
+}
+
+.searchBar .searchFilter button {
+    border: 2px solid var(--purple-color-1);
+    background-color: white;
+    transition: 0.4s;
+}
+
+.searchBar .searchFilter button:hover {
+    cursor: pointer;
+    border: 2px solid var(--purple-color-1);
+    background-color: var(--purple-color-1);
+    color: white;
+}
+
+@media screen and (max-width: 1025px) {
+    .searchBar {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 678px) {
+    .searchBar {
+        width: 90%;
+    }
+
+    .searchBar .searchFilter {
+        flex-direction: column;
+    }
+
+    .searchBar .searchFilter .element {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .searchBar .searchFilter .element select {
+        width: 100%;
+    }
+
+    .searchBar .searchFilter .element input {
+        width: 100%;
+    }
+
+    .searchBar .searchFilter button {
+        width: 50%;
+    }
+}
