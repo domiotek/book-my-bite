@@ -9,6 +9,7 @@
     padding: 0.5em;
     justify-content: space-between;
     box-shadow: 0px 1px 8px 0px #92929287;
+    z-index: 99;
 }
 
 .Wrapper h3 {
