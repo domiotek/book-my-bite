@@ -13,12 +13,15 @@ export default class LocationRepository {
                 }
             }
         });
-        const citiesArray = [];
+
+        const cities = [];
+
         for (const city of cityRecords) {
             const country = new Country(city.voivodeship.country.country_id, city.voivodeship.country.name);
             const voivodeship = new Voivodeship(city.voivodeship.voivodeship_id, city.voivodeship.name, country);
-            citiesArray.push(new City(city.city_id, city.name, voivodeship));
+            cities.push(new City(city.city_id, city.name, voivodeship));
         }
-        return citiesArray;
+
+        return cities;
     }
 }

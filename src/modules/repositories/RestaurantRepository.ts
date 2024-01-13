@@ -15,7 +15,7 @@ interface IRestaurantFilterOptions {
 export default class RestaurantRepository {
 
     public async getRestaurantByID(ID: number) {
-        const result = await global.app.orm.restaurant.findUnique({
+        const restaurantRecord = await global.app.orm.restaurant.findUnique({
             include: {
                 menu: true,
                 foodtype: true,
@@ -38,27 +38,21 @@ export default class RestaurantRepository {
             }
         });
 
-        if (!result) {
+        if (!restaurantRecord) {
             return null;
         }
 
-        const menu = new Menu(result.menu.menu_id, result.menu.url);
-
-        const foodType = new Foodtype(result.foodtype.foodtype_id, result.foodtype.name);
-
-        const country = new Country(result.address.city.voivodeship.country.country_id, result.address.city.voivodeship.country.name);
-
-        const voivodeship = new Voivodeship(result.address.city.voivodeship.voivodeship_id, result.address.city.voivodeship.name, country);
-
-        const city = new City(result.address.city.city_id, result.address.city.name, voivodeship);
-
-        const address = new Address(result.address.address_id, city, result.address.street_name, +result.address.building_number, result.address.zip_code);
-
-        return new Restaurant(result.restaurant_id, result.name, result.description, menu, foodType, address, result.image, result.table_map as any);
+        const menu = new Menu(restaurantRecord.menu.menu_id, restaurantRecord.menu.url);
+        const foodType = new Foodtype(restaurantRecord.foodtype.foodtype_id, restaurantRecord.foodtype.name);
+        const country = new Country(restaurantRecord.address.city.voivodeship.country.country_id, restaurantRecord.address.city.voivodeship.country.name);
+        const voivodeship = new Voivodeship(restaurantRecord.address.city.voivodeship.voivodeship_id, restaurantRecord.address.city.voivodeship.name, country);
+        const city = new City(restaurantRecord.address.city.city_id, restaurantRecord.address.city.name, voivodeship);
+        const address = new Address(restaurantRecord.address.address_id, city, restaurantRecord.address.street_name, +restaurantRecord.address.building_number, restaurantRecord.address.zip_code);
+        return new Restaurant(restaurantRecord.restaurant_id, restaurantRecord.name, restaurantRecord.description, menu, foodType, address, restaurantRecord.image, restaurantRecord.table_map as any);
     }
 
     public async getRestaurants(filters: IRestaurantFilterOptions) {
-        const result = await global.app.orm.restaurant.findMany({
+        const restaurantRecords = await global.app.orm.restaurant.findMany({
             include: {
                 address: true
             },
@@ -73,8 +67,8 @@ export default class RestaurantRepository {
 
         const restaurants = [];
 
-        for (const r of result) {
-            const restaurant = await this.getRestaurantByID(r.restaurant_id);
+        for (const record of restaurantRecords) {
+            const restaurant = await this.getRestaurantByID(record.restaurant_id);
             restaurants.push(restaurant);
         }
 
