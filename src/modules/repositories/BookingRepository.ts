@@ -1,75 +1,108 @@
 import { DateTime } from "luxon";
-import Restaurant from "../models/Restaurant";
-import User from "../models/User";
-import Table from "../models/Table";
-import Booking from "../models/Booking";
-import Menu from "../models/Menu";
-import Foodtype from "../models/Foodtype";
-import Address from "../models/Address";
-import UserRepository from "./UserRepository";
+import Restaurant from "../models/Restaurant.js";
+import User from "../models/User.js";
+import Table from "../models/Table.js";
+import Booking from "../models/Booking.js";
+import UserRepository from "./UserRepository.js";
+import RestaurantRepository from "./RestaurantRepository.js";
 
 export default class BookingRepository {
 
     public async getBooking(bookingID: number) {
-        // const result = await global.app.orm.booking.findUnique({
-        //     include: {
-        //         user: true,
-        //         table: {
-        //             include: {
-        //                 restaurant: {
-        //                     include: {
-        //                         menu: true,
-        //                         foodtype: true,
-        //                         address: {
-        //                             include:
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     },
-        //     where: {
-        //         booking_id: bookingID
-        //     }
-        // });
-        //
-        // if (!result) {
-        //     return null;
-        // }
-        //
-        // const menu = new Menu(result.table.restaurant.menu.menu_id, result.table.restaurant.menu.url);
-        //
-        // const foodType = new Foodtype();
-        //
-        // const address = new Address();
-        //
-        // const restaurant = new Restaurant(result.table.restaurant.restaurant_id, result.table.restaurant.name, result.table.restaurant.description, menu, foodType, address, result.table.restaurant.table_map as any);
-        //
-        // const table = new Table(result.table.table_id, restaurant, result.table.table_name, result.table.description, result.table.max_clients_number);
-        //
-        // const userRepository = new UserRepository();
-        //
-        // const user = await userRepository.getUserByID(result.user_id);
-        //
-        // if (user == null) {
-        //     return null;
-        // }
-        //
-        // return new Booking(result.booking_id, user, table, DateTime.fromJSDate(result.datetime));
+        const result = await global.app.orm.booking.findUnique({
+            include: {
+                user: true,
+                table: true
+            },
+            where: {
+                booking_id: bookingID
+            }
+        });
+
+        if (!result) {
+            return null;
+        }
+
+        const userRepository = new UserRepository();
+        const user = await userRepository.getUserByID(result.user_id);
+        if (!user) {
+            return null;
+        }
+
+        const restaurantRepository = new RestaurantRepository();
+        const restaurant = await restaurantRepository.getRestaurantByID(result.table.restaurant_id);
+        if (!restaurant) {
+            return null;
+        }
+
+        const table = new Table(result.table.table_id, restaurant, result.table.table_name, result.table.description, result.table.max_clients_number);
+        return new Booking(result.booking_id, user, table, DateTime.fromJSDate(result.datetime));
     }
 
     public async getUserBookings(user: User) {
-        // const result = await global.app.orm.booking.findMany({
-        //     where: {
-        //         user_id: user.getID()
-        //     }
-        // });
+        const bookingRecords = await global.app.orm.booking.findMany({
+            include: {
+                table: true
+            },
+            where: {
+                user_id: user.getID()
+            }
+        })
+
+        const restaurantRepository = new RestaurantRepository();
+
+        const bookings = [];
+
+        for (const record of bookingRecords) {
+            const restaurant = await restaurantRepository.getRestaurantByID(record.table.restaurant_id)
+            if (!restaurant) {
+                continue;
+            }
+
+            const table = new Table(record.table_id, restaurant, record.table.table_name, record.table.description, record.table.max_clients_number);
+            const booking = new Booking(record.booking_id, user, table, DateTime.fromJSDate(record.datetime));
+            bookings.push(booking);
+        }
+
+        return bookings;
     }
 
     public async getRestaurantBookings(restaurant: Restaurant, datetime: DateTime) {
-        // await global.app.orm.booking.findMany({
-        //
-        // });
+        const bookingRecords = await global.app.orm.booking.findMany({
+            include: {
+                table: true
+            },
+            where: {
+                datetime: {
+                    gte: datetime.startOf("day").toJSDate(),
+                    lte: datetime.startOf("day").plus({day: 1}).toJSDate(),
+                },
+                table: {
+                    restaurant_id: restaurant.getID()
+                }
+            }
+        })
+
+        const restaurantRepository = new RestaurantRepository();
+        const userRepository = new UserRepository();
+
+        const bookings = [];
+
+        for (const record of bookingRecords) {
+            const restaurant = await restaurantRepository.getRestaurantByID(record.table.restaurant_id)
+            if (!restaurant) {
+                continue;
+            }
+            const user = await userRepository.getUserByID(record.user_id);
+            if (!user) {
+                return null;
+            }
+            const table = new Table(record.table_id, restaurant, record.table.table_name, record.table.description, record.table.max_clients_number);
+            const booking = new Booking(record.booking_id, user, table, DateTime.fromJSDate(record.datetime));
+            bookings.push(booking);
+        }
+
+        return bookings;
     }
 
     public async createBooking(booking: Booking) {

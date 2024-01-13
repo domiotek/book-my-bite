@@ -90,6 +90,7 @@ INSERT INTO "table" (restaurant_id, table_name, description, max_clients_number)
 (10, 'Table 10-4', 'Patio', 4),
 (10, 'Table 10-5', 'Main hall', 8);
 
-INSERT INTO restaurant_manager (restaurant_id, user_id) VALUES 
-(1, 1),
-(2, 2);
+INSERT INTO restaurant_manager (restaurant_id, user_id) VALUES (1, 1), (2, 2);
+
+INSERT INTO booking (user_id, table_id, datetime) VALUES
+(1, 1, '2024-01-10 10:00'), (2, 2, '2024-01-10 10:30'), (1, 1, '2024-01-10 16:30');
