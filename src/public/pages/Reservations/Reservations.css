@@ -1,0 +1,87 @@
+.reservations{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2em;
+    border-radius: 1.5em;
+    margin: auto;
+    gap: 1em;
+}
+
+.reservations .header {
+    padding: 1.5em 2em;
+    color: white;
+    background-color: var(--purple-color-2);
+    width: 100%;
+    border-radius: 1.5em;
+}
+
+.reservations .reservation {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    padding: 1em;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--purple-color-1);
+    color: white;
+    gap: 1em;
+    border-radius: 1.5em;
+}
+
+.reservations .reservation .restaurantInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reservations .reservation .restaurantInfo p {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5em;
+}
+
+.reservations .reservation .restaurantInfo p img {
+    color: var(--orange-color);
+    margin-right: 1em;
+}
+
+.reservations .reservation .restaurantInfo p span {
+    font-size: 0.8em;
+}
+
+.reservations .reservation h3 {
+    text-align: center;
+}
+
+.reservations .reservation button {
+    color: red;
+    background-color: var(--purple-color-1);
+    transition: 0.4s;
+}
+
+.reservations .reservation button img {
+    width: 36px;
+}
+
+.reservations .reservation button:hover {
+    cursor: pointer;
+    background-color: var(--purple-color-2);
+}
+
+@media screen and (max-width: 769px) {
+    .reservations .reservation button img {
+        width: 24px;
+    }
+
+    .reservations .reservation {
+        gap: 0.3em;
+    }
+
+    .reservations .reservation h3 {
+        font-size: 0.8em;
+    }
+}
