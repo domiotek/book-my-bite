@@ -1,7 +1,14 @@
 import Address from "../models/Address";
+import City from "../models/City";
 import Foodtype from "../models/Foodtype";
 import Menu from "../models/Menu";
 import Restaurant from "../models/Restaurant";
+
+interface IRestaurantFilterOptions {
+    city?: City
+    name?: string
+    foodType?: Foodtype
+}
 
 export default class RestaurantRepository {
 
@@ -12,12 +19,12 @@ export default class RestaurantRepository {
         
     }
 
-    public async getRestaurantByName(name: string) {
+    public async getRestaurants(filters: IRestaurantFilterOptions) {
 
     }
 
-    public async getRestaurantsByFoodType(foodtype: Foodtype) {
-
+    public getRestaurantsByFoodType(foodType: Foodtype) {
+        return this.getRestaurants({foodType});
     }
 
     public async createRestaurant(name: string, description: string, menu: Menu, foodtype: Foodtype, address: Address, tableMap: object) {
