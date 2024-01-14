@@ -6,13 +6,18 @@ import locationImg from "../../assets/ui/location-orange.svg";
 import foodTypeImg from "../../assets/ui/foodtype-orange.svg";
 import { AppContext } from '../../App';
 import RestaurantMenuModal from '../../modals/RestaurantMenuModal/RestaurantMenuModal';
+import MakeReservationModal from '../../modals/MakeReservationModal/MakeReservationModal';
 
 export default function Restaurant() {
 	const [appContext, setAppContext] = useContext(AppContext);
 
 	const showFoodMenuAction = useCallback(()=>{
 		appContext.setModalContent(<RestaurantMenuModal images={["/ilustrations/mock_menu.jpg", "/ilustrations/restro_bar.jpg"]}/>);
-	},[appContext]);
+	},[]);
+
+	const showReservationModalAction = useCallback(()=>{
+		appContext.setModalContent(<MakeReservationModal />);
+	}, []);
 
 	return (
 		<div className={classes.RestaurantPage}>
@@ -52,7 +57,7 @@ export default function Restaurant() {
 				</div>
 				<div className={classes.RestaurantImage} style={{"--image-url": "url(/ilustrations/restro_bar.jpg)"} as CSSProperties} />
 			</div>
-			<button className={classes.ReserveButton}>Rezerwuj</button>
+			<button className={classes.ReserveButton} onClick={showReservationModalAction}>Rezerwuj</button>
 		</div>
 	)
 }
