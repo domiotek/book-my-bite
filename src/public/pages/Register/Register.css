@@ -1,0 +1,62 @@
+.register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5em;
+    width: 40%;
+    height: 80vh;
+    margin: auto;
+    text-align: center;
+}
+
+.register form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.register input {
+    margin: 0.5em 0;
+    padding: 0.5em 2em;
+    background: #F3F1F1;
+    color: black;
+    border: none;
+    line-height: 3.5em;
+    width: 100%;
+}
+
+.register input::placeholder {
+    color: black;
+    opacity: 0.8;
+}
+
+.register button {
+    padding: 1em;
+    background-color: var(--purple-color-1);
+    border: 2px solid var(--purple-color-1);
+    color: white;
+    width: 40%;
+    transition: 0.4s;
+}
+
+.register button:hover {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 999px) {
+    .register {
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 668px) {
+    .register {
+        width: 90%;
+    }
+}

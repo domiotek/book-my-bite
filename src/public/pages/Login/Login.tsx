@@ -16,9 +16,11 @@ export default function Login() {
     return (
         <div className={classes.login}>
             <h1>Log into our service</h1>
-            <input type="email" name="email" placeholder='Email' />
-            <input type="password" name='password' placeholder='Password' />
-            <button onClick={clickCallback}>Login</button>   
+            <form>
+                <input type="email" name="email" placeholder='Email' />
+                <input type="password" name='password' placeholder='Password' />
+                <button onClick={clickCallback} type='button'>Login</button>   
+            </form>
         </div>
     )
 }
