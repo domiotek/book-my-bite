@@ -38,6 +38,7 @@ body {
   padding: 0.5em 1em;
   cursor: pointer;
   transition: background 0.4s;
+  color: white;
 }
 
 :global(button):hover {

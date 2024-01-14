@@ -1,0 +1,140 @@
+.ModalWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--purple-color-1);
+    border-radius: inherit;
+    overflow: auto;
+}
+
+.Header {
+    display: flex;
+    position: sticky;
+    top: 0;
+    background: inherit;
+    box-shadow: 0 1px 2px 0 #3333339c;
+    justify-content: flex-end;
+}
+
+.CloseModalButton {
+    margin: 0.5em;
+    color: var(--orange-color);
+    background: none!important;
+}
+
+.ReservationPanel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 1em;
+}
+
+.ReservationDetails {
+    margin: 1em 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.InputWrapper {
+    width: 100%;
+    background: var(--purple-color-2);
+    border-radius: 0.5em;
+    display: flex;
+    padding-left: 0.5em;
+}
+
+.InputWrapper input {
+    flex: 1;
+    padding: 0.75em;
+    border-radius: inherit;
+    background: none;
+    border: none;
+    color: white;
+}
+
+.InputWrapper input::-webkit-input-placeholder {
+    color: white;
+}
+
+.InputWrapper input::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+.HourPicker {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 1em;
+    margin: 2.5em 0;
+}
+
+.HourPicker span {
+    color: white;
+    background: var(--orange-color);
+    width: 60px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    border-radius: 0.5em;
+    transition: background 0.3s;
+    border: solid 1px var(--orange-color);
+    cursor: pointer;
+}
+
+.HourPicker span.Selected, .HourPicker span:hover {
+    background: transparent;
+
+}
+
+.TableMapContainer {
+    background: var(--purple-color-2);
+    width: 100%;
+    height: 270px;
+    border-radius: 0.5em;
+}
+
+.TableMapContainer > h4 {
+    color: white;
+    text-align: center;
+    margin: 1em;
+}
+
+.SubmitButton {
+    margin: 1em;
+    width: 70%;
+    align-self: center;
+    font-size: 1em;
+    font-weight: bold;
+    border: solid 1px var(--orange-color);
+}
+
+.SubmitButton:hover {
+    background: transparent;
+}
+
+@media screen and (min-width: 1025px) {
+
+    .ModalWrapper {
+        min-width: 1000px;
+    }
+
+    .Header {
+        box-shadow: none;
+    }
+
+    .ReservationPanel {
+        flex-direction: row;
+        padding: 0 4em;
+    }
+
+    .TableMapContainer {
+        height: 100%;
+        margin-left: 4em;
+    }
+
+    .SubmitButton {
+        width: 30%;
+        margin: 2em;
+    }
+}

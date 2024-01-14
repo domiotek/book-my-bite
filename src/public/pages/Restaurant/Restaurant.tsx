@@ -1,11 +1,26 @@
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties, useCallback, useContext } from 'react'
 
 import classes from "./Restaurant.css";
 
 import locationImg from "../../assets/ui/location-orange.svg";
 import foodTypeImg from "../../assets/ui/foodtype-orange.svg";
+import descriptionImg from "../../assets/ui/description.svg";
+import menuImg from "../../assets/ui/menu.svg";
+import { AppContext } from '../../App';
+import RestaurantMenuModal from '../../modals/RestaurantMenuModal/RestaurantMenuModal';
+import MakeReservationModal from '../../modals/MakeReservationModal/MakeReservationModal';
 
 export default function Restaurant() {
+	const [appContext, setAppContext] = useContext(AppContext);
+
+	const showFoodMenuAction = useCallback(()=>{
+		appContext.setModalContent(<RestaurantMenuModal images={["/ilustrations/mock_menu.jpg", "/ilustrations/restro_bar.jpg"]}/>);
+	},[]);
+
+	const showReservationModalAction = useCallback(()=>{
+		appContext.setModalContent(<MakeReservationModal />);
+	}, []);
+
 	return (
 		<div className={classes.RestaurantPage}>
 			<div className={classes.RestaurantContainer}>
@@ -27,24 +42,24 @@ export default function Restaurant() {
 							</div>
 						</div>
 						<div className={classes.DetailsItem}>
-							<img src={locationImg} alt="Location" />
+							<img src={descriptionImg} alt="Description" />
 							<div>
 								<h5>Opis</h5>
 								<h6>Tu będzie jakiś opis, chyba</h6>
 							</div>
 						</div>
 						<div className={classes.DetailsItem}>
-							<img src={locationImg} alt="Location" />
+							<img src={menuImg} alt="Menu" />
 							<div>
 								<h5>Menu</h5>
-								<button className={classes.ShowMenuButton}>Pokaż menu</button>
+								<button className={classes.ShowMenuButton} onClick={showFoodMenuAction}>Pokaż menu</button>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div className={classes.RestaurantImage} style={{"--image-url": "url(/ilustrations/restro_bar.jpg)"} as CSSProperties} />
 			</div>
-			<button className={classes.ReserveButton}>Rezerwuj</button>
+			<button className={classes.ReserveButton} onClick={showReservationModalAction}>Rezerwuj</button>
 		</div>
 	)
 }
