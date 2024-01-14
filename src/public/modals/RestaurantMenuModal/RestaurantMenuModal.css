@@ -1,0 +1,64 @@
+.Wrapper {
+    max-width: 500px;
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: inherit;
+    overflow: auto;
+}
+
+.Wrapper img {
+    width: 100%;
+    border-radius: 0 0 0.5em 0.5em;
+}
+
+.Header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5em;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.2em;
+    position: sticky;
+    top: 0;
+    background: white;
+}
+
+.Header button, .PrevImgButton, .NextImgButton {
+    border-radius: 50%;
+    padding: 0.5em;
+    align-self: center;
+    aspect-ratio: 1 / 1;
+    width: 35px;
+}
+
+.PrevImgButton, .NextImgButton {
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%);
+    display: none;
+    z-index: 99;
+}
+
+.PrevImgButton.Shown, .NextImgButton.Shown {
+    display: block;
+}
+
+.NextImgButton {
+    right: -10px;
+    left: unset;
+}
+
+
+@media screen and (min-width: 611px) {
+    .PrevImgButton {
+        left: -40px;
+    }
+
+    .NextImgButton {
+        right: -40px;
+    }
+    
+}

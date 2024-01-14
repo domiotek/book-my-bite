@@ -1,11 +1,19 @@
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties, useCallback, useContext } from 'react'
 
 import classes from "./Restaurant.css";
 
 import locationImg from "../../assets/ui/location-orange.svg";
 import foodTypeImg from "../../assets/ui/foodtype-orange.svg";
+import { AppContext } from '../../App';
+import RestaurantMenuModal from '../../modals/RestaurantMenuModal/RestaurantMenuModal';
 
 export default function Restaurant() {
+	const [appContext, setAppContext] = useContext(AppContext);
+
+	const showFoodMenuAction = useCallback(()=>{
+		appContext.setModalContent(<RestaurantMenuModal images={["/ilustrations/mock_menu.jpg", "/ilustrations/restro_bar.jpg"]}/>);
+	},[appContext]);
+
 	return (
 		<div className={classes.RestaurantPage}>
 			<div className={classes.RestaurantContainer}>
@@ -37,7 +45,7 @@ export default function Restaurant() {
 							<img src={locationImg} alt="Location" />
 							<div>
 								<h5>Menu</h5>
-								<button className={classes.ShowMenuButton}>Pokaż menu</button>
+								<button className={classes.ShowMenuButton} onClick={showFoodMenuAction}>Pokaż menu</button>
 							</div>
 						</div>
 					</div>
