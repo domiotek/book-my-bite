@@ -1,0 +1,60 @@
+.FullScreenWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: fadeInAnim 0.3s ease-in-out forwards;
+}
+
+.ModalContainer {
+    min-width: 95%;
+    min-height: 50%;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 1px 1px 7px 0 #7373736e;
+    margin: 2rem 0.5em;
+    animation: scaleInAnim 0.3s ease-in-out forwards;
+    display: flex;
+    flex-direction: column;
+}
+
+
+@media screen and (min-width: 426px) {
+    .ModalContainer {
+        min-width: 400px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .ModalContainer {
+        min-width: 500px;
+    }
+    
+}
+
+
+@keyframes fadeInAnim {
+    from {
+        background: rgba(0, 0, 0, 0);
+    }
+
+    to {
+        background: rgba(0, 0, 0, 0.392);
+    }
+}
+
+@keyframes scaleInAnim {
+    from {
+        transform: scale(75%);
+    }
+
+    to {
+        transform: scale(100%);
+    }
+}
