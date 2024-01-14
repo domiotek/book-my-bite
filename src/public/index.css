@@ -13,7 +13,9 @@ body {
   width: 100%;
   height: 100%;
 
+  --orange-color-light-1: #F8C296;
   --orange-color: #F6B17A;
+  --orange-color-dark-1: #F4A361;
   --purple-color-1: #424769;
   --purple-color-2: #7077A1;
 }
@@ -34,4 +36,14 @@ body {
   background: var(--orange-color);
   border-radius: 1em;
   padding: 0.5em 1em;
+  cursor: pointer;
+  transition: background 0.4s;
+}
+
+:global(button):hover {
+  background: var(--orange-color-light-1); 
+}
+
+:global(button):active {
+  background: var(--orange-color-dark-1);
 }

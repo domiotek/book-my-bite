@@ -1,0 +1,132 @@
+.RestaurantPage {
+    display: flex;
+    flex-direction: column;
+}
+
+.RestaurantContainer {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.RestaurantDetails {
+    background: var(--purple-color-1);
+    border-radius: 1.5em 1.5em 0 0;
+    padding: 1.25em;
+    color: white;
+    margin: -1.5em -0.5em 0;
+    box-shadow: 0 1px 7px 0 #5a5a5ad9;
+}
+.DetailItemsContainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-top: 2em;
+    gap: 1em;
+}
+
+.DetailsItem {
+    display: flex;
+    align-items: flex-start;
+}
+
+.DetailsItem img {
+    width: 25%;
+    margin: 0px 0.5em;
+    max-width: 24px;
+}
+
+.DetailsItem h5 {
+    font-size: 1em;
+}
+
+.DetailsItem h6 {
+    font-weight: 400;
+    font-size: 0.6em;
+    margin-top: 0.5em;
+}
+
+.RestaurantImage {
+    background: var(--image-url);
+    background-size: 100%;
+    height: 230px;
+    margin: -0.5em;
+    background-position: center 30%;
+}
+
+.ShowMenuButton {
+    background: var(--purple-color-2);
+    color: white;
+    font-size: 0.75em;
+    margin-top: 0.5em;
+}
+
+.ShowMenuButton:hover {
+    background: #8F95B6;
+
+}
+
+.ShowMenuButton:active {
+    background: #5D658F;
+}
+
+.ReserveButton {
+    margin-top: 2em;
+    align-self: center;
+    padding: 1em 4em;
+    font-size: 1em
+}
+
+@media screen and (min-width: 426px) {
+    .RestaurantImage {
+        height: 290px;
+    }
+
+    .DetailItemsContainer {
+        grid-template-columns: 1fr 1fr;
+        max-width: 500px;
+        margin: 2em auto;
+    }
+}
+
+@media screen and (min-width: 611px) {
+    .RestaurantDetails {
+        width: 80%;
+        align-self: center;
+        border-radius: 1.5em;
+        max-width: 600px;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .RestaurantContainer {
+        flex-direction: row;
+        margin: 2em;
+        align-items: stretch;
+        max-width: 1000px;
+        margin: 0 auto;
+        width: 100%;
+        margin-top: 4em;
+    }
+
+    .RestaurantDetails {
+        width: 50%;
+        margin-right: 0.5em;
+        align-self: unset;
+        margin: 0 0.5em 0 0;
+        max-width: unset;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .RestaurantImage {
+        width: 50%;
+        border-radius: 1.5em;
+        margin: 0 0 0 0.5em;
+        box-shadow: 0 1px 7px 0 #5a5a5ad9;
+    }
+
+    .DetailItemsContainer {
+        flex: 1;
+        max-width: unset;
+        margin: 2em;
+    }
+}
