@@ -31,6 +31,9 @@
     align-self: center;
     aspect-ratio: 1 / 1;
     width: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .PrevImgButton, .NextImgButton {
@@ -40,10 +43,16 @@
     transform: translateY(-50%);
     display: none;
     z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .PrevImgButton.Shown, .NextImgButton.Shown {
     display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .NextImgButton {

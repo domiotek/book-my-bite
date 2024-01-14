@@ -3,8 +3,9 @@ import React, { MouseEvent, MouseEventHandler, useCallback, useContext, useEffec
 import classes from "./MakeReservationModal.css";
 import { ModalContext } from '../../components/Modal/Modal';
 
-import dateImg from "../../assets/ui/location-orange.svg";
-import peopleImg from "../../assets/ui/location-orange.svg";
+import dateImg from "../../assets/ui/date.svg";
+import peopleImg from "../../assets/ui/people.svg";
+import closeImg from "../../assets/ui/close.svg";
 import { DateTime } from 'luxon';
 
 export default function MakeReservationModal() {
@@ -36,7 +37,7 @@ export default function MakeReservationModal() {
 	return (
 		<div className={classes.ModalWrapper}>
 			<div className={classes.Header}>
-				<button className={classes.CloseModalButton} onClick={closeModal}>X</button>
+				<button className={classes.CloseModalButton} onClick={closeModal}><img src={closeImg} alt="close" /></button>
 			</div>
 
 
