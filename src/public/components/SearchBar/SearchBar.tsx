@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import foodtypeImg from "../../assets/ui/foodtype.svg";
 import locationImg from "../../assets/ui/location.svg";
 import searchImg from "../../assets/ui/search.svg";
@@ -6,20 +6,32 @@ import searchImg from "../../assets/ui/search.svg";
 import classes from './SearchBar.css';
 
 export default function SearchBar() {
+    const [locations, setLocations] = useState<Location[]>([]);
+    const [foodtypes, setFoodtypes] = useState<Foodtype[]>([]);
 
-    const mockLocations = [
-        { id: 1, name: 'Kraków' },
-        { id: 2, name: 'Gdańsk' },
-        { id: 3, name: 'Wrocław' },
-    ];
+    useEffect(() => {
+        const aborter = new AbortController();
 
-    const mockFoodTypes = [
-        { id: 1, name: 'Kuchnia Polska' },
-        { id: 2, name: 'Kuchnia Włoska' },
-        { id: 3, name: 'Kuchnia Meksykańska' },
-        { id: 4, name: 'Kuchnia Amerykańska' },
-        { id: 5, name: 'Kuchnia Japońska' },
-    ]
+        new Promise<void>(async res=>{
+            try {
+                const response = await fetch('/api/locationsAndFoodtypes', {signal: aborter.signal});
+
+                if (!response.ok) {
+                    console.log('Cannot reach response');
+                }
+
+                const data = await response.json();
+                setLocations(data.locations);
+                setFoodtypes(data.foodtypes);
+            } catch (e) {
+                console.log('Error in fetch operation: ', e);
+            }
+
+            res();
+        });
+
+        return ()=>aborter.abort();
+    }, []);
 
     return (
         <div className={classes.searchBar}>
@@ -30,7 +42,7 @@ export default function SearchBar() {
                     <select name="location" id="location" title="Lokalizacja">
                         <option value="">Lokalizacja</option>
                         {
-                            mockLocations.map((location) => (
+                            locations.map((location) => (
                                 <option key={location.id} value={location.id}>{location.name}</option>
                             ))
                         }
@@ -45,7 +57,7 @@ export default function SearchBar() {
                     <select name="foodtype" id="foodtype" title="Kategoria">
                         <option value="">Kategoria</option>
                         {
-                            mockFoodTypes.map((foodtype) => (
+                            foodtypes.map((foodtype) => (
                                 <option key={foodtype.id} value={foodtype.id}>{foodtype.name}</option>
                             ))
                         }

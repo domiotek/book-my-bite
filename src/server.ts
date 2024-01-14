@@ -20,6 +20,24 @@ export default class App {
         return this._orm;
     }
 
+    public get fastify() {
+        return this._app;
+    }
+
+    private async initializeRoutes() {
+        const files = await fs.readdir("dist/modules/routes");
+
+        for (const file of files) {
+            if(file.endsWith("js")) {
+                const routes = await import(`./modules/routes/${file}`)
+
+                for (const route of routes.default) {
+                    this._app.route(route);
+                }
+            }
+        }
+    }
+
     constructor() {
         this._envMode = process.env.NODE_ENV as any;
 
@@ -46,11 +64,14 @@ export default class App {
             if(!content) res.send("<h2>Error 500</h2><p>Website entry file couldn't be located. Has the website been built yet?</p>");
             else res.send(content); 
         });
+
         
     }
 
 
     public async start() {
+        await this.initializeRoutes();
+
         await this._app.listen({port: env.LISTEN_PORT, host: env.LISTEN_HOST});
 
         const state = this._app.server.listening;
