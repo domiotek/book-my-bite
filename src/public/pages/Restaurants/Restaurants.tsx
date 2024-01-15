@@ -1,12 +1,38 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useContext, useEffect, useState } from 'react';
 
 import classes from "./Restaurants.css";
 import SearchBar from '../../components/SearchBar/SearchBar';
 
 import locationImg from "../../assets/ui/location-orange.svg";
 import foodtypeImg from "../../assets/ui/foodtype-orange.svg";
+import { AppContext } from '../../App';
 
 export default function Restaurants() {
+	const [appContext] = useContext(AppContext);
+	const [restaurants, setRestaurants] = useState<Restaurants[]>([]);
+
+	useEffect(() => {
+		const aborter = new AbortController();
+
+		new Promise<void>(async res => {
+			try {			
+				const response = await fetch(`/api/restaurants?city=${appContext.filters.city}&name=${appContext.filters.name}&foodType=${appContext.filters.foodType}`, {signal: aborter.signal});
+
+				if (!response.ok) {
+					console.log('Cannot reach restaurants response')
+				}
+
+				const data = await response.json();
+				setRestaurants(data.restaurants);
+			} catch (e) {
+				console.log('Error in fetch restaurants operation: ', e)
+			}
+
+			res();
+		});
+
+		return () => aborter.abort();
+	}, [appContext.filters]);
 
 	const mockRestaurants = [
 		{
@@ -45,7 +71,7 @@ export default function Restaurants() {
 
 			<div className={classes.RestaurantsWrapper}>
 				{
-					mockRestaurants.map(rest=>
+					restaurants.map(rest=>
 						<div key={rest.id} className={classes.RestaurantPanel}>
 							<div className={classes.Image} style={{"--image-url": `url(/ilustrations/${rest.imgUrl})`} as CSSProperties}/>
 							<h3>{rest.name}</h3>

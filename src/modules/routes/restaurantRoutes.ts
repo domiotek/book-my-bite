@@ -6,4 +6,10 @@ const getLocationsAndFoodtypes = {
     handler: RestaurantController.getLocationsAndFoodtypes
 }
 
-export default [getLocationsAndFoodtypes];
+const getRestaurants = {
+    method: "GET",
+    url: "/api/restaurants",
+    handler: RestaurantController.getRestaurants
+}
+
+export default [getLocationsAndFoodtypes, getRestaurants];

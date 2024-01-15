@@ -7,9 +7,9 @@ import Voivodeship from "../models/Voivodeship.js";
 import Country from "../models/Country.js";
 
 interface IRestaurantFilterOptions {
-    city?: City
+    city?: number
     name?: string
-    foodType?: Foodtype
+    foodType?: number
 }
 
 export default class RestaurantRepository {
@@ -58,10 +58,12 @@ export default class RestaurantRepository {
             },
             where: {
                 address: {
-                    city_id: filters.city?.getID()
+                    city_id: filters?.city
                 },
-                name: filters.name,
-                foodtype_id: filters.foodType?.getID()
+                name: {
+                    contains: filters?.name
+                },
+                foodtype_id: filters?.foodType
             },
         });
 
