@@ -26,6 +26,26 @@ interface Restaurant {
     imgUrl: string
 }
 
-type IResponse<T> = {
+type ISuccessResponse<T> = {
+    status: "Success"
     data: T
 }
+
+type IFailureResponse<T> = {
+    status: "Failure"
+    errCode: T
+}
+
+
+export namespace SignInEndpoint {
+    interface IRequest {
+        email?: string
+        password?: string
+    }
+    
+    type IResponse = ISuccessResponse<undefined> | IFailureResponse<"AlreadySignedIn" | "InvalidCredentials" | "DBError">
+}
+
+
+
+
