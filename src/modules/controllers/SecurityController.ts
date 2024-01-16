@@ -19,7 +19,7 @@ export default class SecurityController {
 
         if(session) {
             if(session.isValid()) return true;
-            else sessionRepo.deleteSession(session);
+            else sessionRepo.deleteSession(session.getID());
         }
 
         return false;
@@ -62,6 +62,23 @@ export default class SecurityController {
         }
 
         return result;
+    }
+
+    public static async checkSignInStatus(req: FastifyRequest) {
+        return {
+            status: "Success",
+            data: await SecurityController.verifyUserSession(req.cookies["session"] ?? "")
+        }
+    }
+
+    public static async signOutUser(req: FastifyRequest, res: FastifyReply) {
+        const sessionID = req.cookies["session"];
+
+        if(sessionID) {
+            SecurityController.sessionRepository.deleteSession(sessionID ?? "");
+        }
+
+        res.redirect("/Home");
     }
 
     public static async generatePassword(req: FastifyRequest, res: FastifyReply) {

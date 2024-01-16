@@ -77,12 +77,12 @@ export default class SessionRepository {
         return true;
     }
 
-    public async deleteSession(session: Session) {
+    public async deleteSession(sessionID: string) {
 
         try {
             await global.app.orm.session.delete({
                 where: {
-                    session_id: session.getID()
+                    session_id: sessionID
                 }
             });
     

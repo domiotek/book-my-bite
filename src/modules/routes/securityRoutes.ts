@@ -7,6 +7,18 @@ const signIn = {
     handler: SecurityController.signInUser
 }
 
+const checkSignInStatus = {
+    method: "GET",
+    url: "/api/checkSignInStatus",
+    handler: SecurityController.checkSignInStatus
+}
+
+const signOut = {
+    method: "GET",
+    url: "/api/signout",
+    handler: SecurityController.signOutUser
+}
+
 const getPasswd = {
     method: "POST",
     url: "/api/genPassword",
@@ -14,4 +26,4 @@ const getPasswd = {
 }
 
 
-export default [signIn, getPasswd];
+export default [signIn, checkSignInStatus, signOut, getPasswd];

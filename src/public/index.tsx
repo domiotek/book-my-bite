@@ -7,6 +7,7 @@ import App from './App';
 
 const Home = React.lazy(()=>import("./pages/Home/Home"));
 const Login = React.lazy(()=>import("./pages/Login/Login"));
+const Logout = React.lazy(()=>import("./pages/Logout/Logout"));
 const ManageRestaurant = React.lazy(()=>import("./pages/ManageRestaurant/ManageRestaurant"));
 const Register = React.lazy(()=>import("./pages/Register/Register"));
 const Reservations = React.lazy(()=>import("./pages/Reservations/Reservations"));
@@ -25,6 +26,7 @@ root.render(
 				<Route path='/' element={<Home />} />
 				<Route index path='/Home' element={<Home />} />
 				<Route path='/Login' element={<Login />} />
+				<Route path="/Logout" element={<Logout />} />
 				<Route path='/ManageRestaurant' element={<ManageRestaurant />} />
 				<Route path='/Register' element={<Register />} /> 
 				<Route path='/Reservations' element={<Reservations />} />

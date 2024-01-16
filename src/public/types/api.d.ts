@@ -43,7 +43,17 @@ export namespace SignInEndpoint {
         password?: string
     }
     
-    type IResponse = ISuccessResponse<undefined> | IFailureResponse<"AlreadySignedIn" | "InvalidCredentials" | "DBError">
+    type IResponse<T extends "Success" | "Failure" | "Either"="Either"> = 
+        (T extends "Success" | "Either"?ISuccessResponse<undefined>:never) 
+        |
+        (T extends "Failure" | "Either"?IFailureResponse<"AlreadySignedIn" | "InvalidCredentials" | "DBError">:never)
+}
+
+export namespace CheckSignInEndpoint {
+    type IResponse = {
+        status: "Success",
+        data: boolean
+    }
 }
 
 

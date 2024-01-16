@@ -1,10 +1,11 @@
-import React, { Suspense, createContext, useMemo, useState } from 'react';
+import React, { Suspense, createContext, useEffect, useMemo, useState } from 'react';
 
 import classes from "./App.css";
 import { Outlet } from 'react-router-dom';
 import Header from './components/Header/Header';
 import FullscreenNav from './components/FullscreenNav/FullscreenNav';
 import Modal from './components/Modal/Modal';
+import { CheckSignInEndpoint } from './types/api';
 
 interface IRestaurantFilterOptions {
     city: number | null
@@ -47,6 +48,24 @@ export default function App() {
 		}else return commonLinks.concat(unauthorizedLinks);
 
 	},[appContext.isUserLoggedIn, appContext.isRestaurantManager]);
+
+	useEffect(()=>{
+		const aborter = new AbortController();
+
+		new Promise<void>(async res => {
+			const response = await fetch(`/api/checkSignInStatus`, { signal: aborter.signal });
+
+			if(response.ok) {
+				const body = await response.json() as CheckSignInEndpoint.IResponse;
+				const newCtx = Object.assign({},appContext);
+                newCtx.isUserLoggedIn = body.data;
+                setAppContext(newCtx);
+			}
+			res();
+		});
+
+		return () => aborter.abort();
+	},[]);
 	
     return (
       <div className={classes.AppWrapper}>
