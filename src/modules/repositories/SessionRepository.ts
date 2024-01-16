@@ -87,7 +87,9 @@ export default class SessionRepository {
             });
     
         }catch (error: any) {
-            Output.init().bg("red").fg("white").print(`[Error] Couldn't delete session. ${error.message}`)
+            //Skipping error log for record not found error
+            if(error.code!=="P2025")
+                Output.init().bg("red").fg("white").print(`[Error] Couldn't delete session. ${error.message}`)
             return false;
         }
     
