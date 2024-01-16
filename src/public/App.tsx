@@ -7,9 +7,9 @@ import FullscreenNav from './components/FullscreenNav/FullscreenNav';
 import Modal from './components/Modal/Modal';
 
 interface IRestaurantFilterOptions {
-    city: string | null
+    city: number | null
     name: string | null
-    foodType: string | null
+    foodType: number | null
 }
 
 interface IAppContext {
