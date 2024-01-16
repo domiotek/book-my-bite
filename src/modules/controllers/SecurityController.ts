@@ -80,13 +80,4 @@ export default class SecurityController {
 
         res.redirect("/Home");
     }
-
-    public static async generatePassword(req: FastifyRequest, res: FastifyReply) {
-        const data = req.body as any;
-        const hashedPasswd = await hash(data["password"] ?? "",10);
-        return {
-            status: "Success",
-			data: hashedPasswd
-        }
-    }
 }

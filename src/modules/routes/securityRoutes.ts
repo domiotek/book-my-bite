@@ -19,11 +19,4 @@ const signOut = {
     handler: SecurityController.signOutUser
 }
 
-const getPasswd = {
-    method: "POST",
-    url: "/api/genPassword",
-    handler: SecurityController.generatePassword
-}
-
-
-export default [signIn, checkSignInStatus, signOut, getPasswd];
+export default [signIn, checkSignInStatus, signOut];
