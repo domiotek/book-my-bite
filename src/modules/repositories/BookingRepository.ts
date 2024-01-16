@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 import Restaurant from "../models/Restaurant.js";
-import User from "../models/User.js";
 import Table from "../models/Table.js";
 import Booking from "../models/Booking.js";
 import UserRepository from "./UserRepository.js";
@@ -39,17 +38,18 @@ export default class BookingRepository {
         return new Booking(result.booking_id, user, table, DateTime.fromJSDate(result.datetime));
     }
 
-    public async getUserBookings(user: User) {
+    public async getUserBookings(id: number) {
         const bookingRecords = await global.app.orm.booking.findMany({
             include: {
                 table: true
             },
             where: {
-                user_id: user.getID()
+                user_id: id
             }
         })
 
         const restaurantRepository = new RestaurantRepository();
+        const userRepository = new UserRepository();
 
         const bookings = [];
 
@@ -59,6 +59,10 @@ export default class BookingRepository {
                 continue;
             }
 
+            const user = await userRepository.getUserByID(id);
+            if (!user) {
+                return null;
+            }
             const table = new Table(record.table_id, restaurant, record.table.table_name, record.table.description, record.table.max_clients_number);
             const booking = new Booking(record.booking_id, user, table, DateTime.fromJSDate(record.datetime));
             bookings.push(booking);
@@ -123,10 +127,10 @@ export default class BookingRepository {
         return true;
     }
 
-    public async deleteBooking(booking: Booking) {
+    public async deleteBooking(id: number) {
         const result = await global.app.orm.booking.deleteMany({
             where: {
-                booking_id: booking.getID()
+                booking_id: id
             }
         });
 

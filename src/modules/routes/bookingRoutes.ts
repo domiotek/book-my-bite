@@ -1,0 +1,15 @@
+import BookingController from "../controllers/BookingController.js";
+
+const getUserBookings = {
+    method: "GET",
+    url: "/api/userBookings",
+    handler: BookingController.getUserBookings
+}
+
+const deleteBooking = {
+    method: "POST",
+    url: "/api/deleteBooking",
+    handler: BookingController.deleteBooking
+}
+
+export default [getUserBookings, deleteBooking];
