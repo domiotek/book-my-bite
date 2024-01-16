@@ -7,6 +7,7 @@ import locationImg from "../../assets/ui/location-orange.svg";
 import foodtypeImg from "../../assets/ui/foodtype-orange.svg";
 import { AppContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
+import { Restaurants } from '../../types/api';
 
 export default function Restaurants() {
 	const [appContext, setAppContext] = useContext(AppContext);

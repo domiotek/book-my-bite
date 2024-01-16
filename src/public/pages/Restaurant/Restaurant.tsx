@@ -9,6 +9,7 @@ import menuImg from "../../assets/ui/menu.svg";
 import { AppContext } from '../../App';
 import RestaurantMenuModal from '../../modals/RestaurantMenuModal/RestaurantMenuModal';
 import MakeReservationModal from '../../modals/MakeReservationModal/MakeReservationModal';
+import { Restaurant } from '../../types/api';
 
 export default function Restaurant() {
 	const [appContext, setAppContext] = useContext(AppContext);
