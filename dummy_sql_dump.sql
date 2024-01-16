@@ -2,7 +2,12 @@ INSERT INTO country (name) VALUES ('Poland');
 
 INSERT INTO voivodeship (voivodeship_id, country_id, name) VALUES (1, 1, 'Lesser Poland');
 
-INSERT INTO city (city_id, voivodeship_id, name) VALUES (1, 1, 'Krakow');
+INSERT INTO city (city_id, voivodeship_id, name) VALUES 
+(1, 1, 'Krakow'),
+(2, 1, 'Wroclaw'),
+(3, 1, 'Warszawa'),
+(4, 1, 'Gdansk'),
+(5, 1, 'Poznan');
 
 INSERT INTO role (name) VALUES ('Customer'), ('Manager');
 
@@ -13,30 +18,30 @@ INSERT INTO "user" (email, password_hash, name, surname, phone, role_id) VALUES
 INSERT INTO address (city_id, street_name, building_number, zip_code) VALUES 
 (1, 'Main Street 1', '31', '31-000'),
 (1, 'Main Street 2', '32', '31-000'),
-(1, 'Main Street 3', '33', '31-000'),
-(1, 'Main Street 4', '34', '31-000'),
-(1, 'Main Street 5', '35', '31-000'),
 (1, 'Main Street 6', '36', '31-000'),
 (1, 'Main Street 7', '37', '31-000'),
 (1, 'Main Street 8', '38', '31-000'),
 (1, 'Main Street 9', '39', '31-000'),
-(1, 'Main Street 10', '40', '31-000');
+(1, 'Main Street 10', '40', '31-000'),
+(3, 'Main Street 5', '35', '31-000'),
+(2, 'Main Street 3', '33', '31-000'),
+(5, 'Main Street 4', '34', '31-000');
 
-INSERT INTO foodtype (name) VALUES ('Italian'), ('Mexican'), ('Chinese'), ('Japanese'), ('Indian');
+INSERT INTO foodtype (name) VALUES ('Włoska'), ('Meksykańska'), ('Chińska'), ('Japońska'), ('Indonezyjska'), ('Polska'), ('Amerykańska');
 
 INSERT INTO menu (url) VALUES ('http://menu1.com'), ('http://menu2.com'), ('http://menu3.com'), ('http://menu4.com'), ('http://menu5.com');
 
 INSERT INTO restaurant (name, description, menu_id, foodtype_id, address_id, image) VALUES
-('Restaurant 1', 'A cozy place for dining', 1, 1, 1, 'image_path'),
-('Restaurant 2', 'A cozy place for dining', 2, 2, 2, 'image_path'),
-('Restaurant 3', 'A cozy place for dining', 3, 3, 3, 'image_path'),
-('Restaurant 4', 'A cozy place for dining', 4, 4, 4, 'image_path'),
-('Restaurant 5', 'A cozy place for dining', 5, 5, 5, 'image_path'),
-('Restaurant 6', 'A cozy place for dining', 1, 1, 6, 'image_path'),
-('Restaurant 7', 'A cozy place for dining', 2, 2, 7, 'image_path'),
-('Restaurant 8', 'A cozy place for dining', 3, 3, 8, 'image_path'),
-('Restaurant 9', 'A cozy place for dining', 4, 4, 9, 'image_path'),
-('Restaurant 10', 'A cozy place for dining', 5, 5, 10, 'image_path');
+('Olio | Pizza Napoletana', 'Tutaj jest kozak pizzca', 1, 1, 2, 'olio.JPG'),
+('Lees Chinese', 'Tomasza 20 to super miejsce na zjedzenie czegoś!', 2, 3, 8, 'lees-chinese.jpg'),
+('Tomasza 20 Restro Bar', 'A cozy place for dining', 3, 1, 1, 'restro_bar.jpg'),
+('Masala Grill & Bar', 'Tu se zjesz indonezyjskie', 4, 5, 3, 'masala.jpg'),
+('Zen On Restaurant', 'Japońskie jedzenie tak o', 5, 4, 4, 'zen-on.jpg'),
+('Ale wino!', 'Tu zjesz dobrze po polsku', 1, 6, 5, 'ale-wino.jpg'),
+('Restaurant 7', 'A cozy place for dining', 2, 2, 7, 'restro_bar.jpg'),
+('Restaurant 8', 'A cozy place for dining', 3, 3, 8, 'restro_bar.jpg'),
+('Restaurant 9', 'A cozy place for dining', 4, 4, 9, 'restro_bar.jpg'),
+('Restaurant 10', 'A cozy place for dining', 5, 5, 10, 'restro_bar.jpg');
 
 INSERT INTO "table" (restaurant_id, table_name, description, max_clients_number) VALUES 
 (1, 'Table 1-1', 'Near the window', 4),
