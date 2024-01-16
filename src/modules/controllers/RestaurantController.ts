@@ -75,4 +75,34 @@ export default class RestaurantController {
             }
         }
     }
+
+    public static async getRestaurant(req: FastifyRequest, res: FastifyReply) {
+        const restaurantRepo = new RestaurantRepository();
+
+        try {
+            const reqQuery = req.query as { id: string };
+
+            const restaurant = await restaurantRepo.getRestaurantByID(+reqQuery.id);
+
+            const restaurantMapped = {
+                name: restaurant?.getName(),
+                description: restaurant?.getDescription(),
+                location: restaurant?.getAddress().getCity().getName() + ', ' + restaurant?.getAddress().getStreetName() + ' ' + restaurant?.getAddress().getBuildingNumber(),
+                foodtype: restaurant?.getFoodtype().getName(),
+                menu: restaurant?.getMenu().getUrl(),
+                tablesMap: restaurant?.getTablemap(),
+                imgUrl: restaurant?.getImage()
+            }
+
+            return {
+                restaurant: restaurantMapped
+            }
+
+        } catch (e) {
+            res.status(500);
+            return {
+                error: e
+            }
+        }
+    }
 }

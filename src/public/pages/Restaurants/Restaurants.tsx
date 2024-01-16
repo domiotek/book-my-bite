@@ -6,17 +6,20 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import locationImg from "../../assets/ui/location-orange.svg";
 import foodtypeImg from "../../assets/ui/foodtype-orange.svg";
 import { AppContext } from '../../App';
+import { useNavigate } from 'react-router-dom';
 
 export default function Restaurants() {
-	const [appContext] = useContext(AppContext);
+	const [appContext, setAppContext] = useContext(AppContext);
 	const [restaurants, setRestaurants] = useState<Restaurants[]>([]);
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const aborter = new AbortController();
 
 		new Promise<void>(async res => {
-			try {			
-				const response = await fetch(`/api/restaurants?city=${appContext.filters.city}&name=${appContext.filters.name}&foodType=${appContext.filters.foodType}`, {signal: aborter.signal});
+			try {
+				const response = await fetch(`/api/restaurants?city=${appContext.filters.city}&name=${appContext.filters.name}&foodType=${appContext.filters.foodType}`, { signal: aborter.signal });
 
 				if (!response.ok) {
 					console.log('Cannot reach restaurants response')
@@ -34,36 +37,13 @@ export default function Restaurants() {
 		return () => aborter.abort();
 	}, [appContext.filters]);
 
-	const mockRestaurants = [
-		{
-			id: 1,
-			name: "Tomasza 20 Resto Bar",
-			location: "Kraków, Świętego Tomasza 20",
-			foodtype: "Kuchnia Włoska",
-			imgUrl: "restro_bar.jpg"
-		},
-		{
-			id: 2,
-			name: "Olio | Pizza Napoletana",
-			location: "Kraków, Nadwiślańska 7",
-			foodtype: "Kuchnia Włoska",
-			imgUrl: "olio.jpg"
-		},
-		{
-			id: 3,
-			name: "Tomasza 20 Resto Bar",
-			location: "Kraków, Świętego Tomasza 20",
-			foodtype: "Kuchnia Włoska",
-			imgUrl: "restro_bar.jpg"
-		},
-		{
-			id: 4,
-			name: "Olio | Pizza Napoletana",
-			location: "Kraków, Nadwiślańska 7",
-			foodtype: "Kuchnia Włoska",
-			imgUrl: "olio.jpg"
-		},
-	]
+	function onSearch(id: number) {
+		const newSelectedRestaurant = id;
+
+		setAppContext({ ...appContext, selectedRestaurantID: newSelectedRestaurant });
+
+		navigate('/Restaurant');
+	}
 
 	return (
 		<div className={classes.RestaurantsPage}>
@@ -71,9 +51,9 @@ export default function Restaurants() {
 
 			<div className={classes.RestaurantsWrapper}>
 				{
-					restaurants.map(rest=>
-						<div key={rest.id} className={classes.RestaurantPanel}>
-							<div className={classes.Image} style={{"--image-url": `url(/ilustrations/${rest.imgUrl})`} as CSSProperties}/>
+					restaurants.map(rest =>
+						<div key={rest.id} className={classes.RestaurantPanel} onClick={() => onSearch(rest.id)}>
+							<div className={classes.Image} style={{ "--image-url": `url(/ilustrations/${rest.imgUrl})` } as CSSProperties} />
 							<h3>{rest.name}</h3>
 							<ul>
 								<li>

@@ -16,6 +16,16 @@ interface Restaurants {
     name: string
 }
 
+interface Restaurant {
+    name: string,
+    description: string,
+    location: string,
+    foodtype: string,
+    menu: string,
+    tablesMap: string,
+    imgUrl: string
+}
+
 type IResponse<T> = {
     data: T
 }
