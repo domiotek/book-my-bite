@@ -47,7 +47,7 @@ export default class RestaurantController {
 
         try {
             const reqQuery = req.query as IRestaurantFilterOptions;
-            
+
             const filters = {
                 city: (+reqQuery.city) ? +reqQuery.city : undefined,
                 name: (reqQuery.name !== 'null' && reqQuery.name !== '') ? reqQuery.name : undefined,
@@ -59,14 +59,14 @@ export default class RestaurantController {
             const restaurantsMapped = restaurants?.map((restaurant) => ({
                 id: restaurant?.getID(),
                 name: restaurant?.getName(),
-                location: restaurant?.getAddress().getCity().getName(),
+                location: restaurant?.getAddress().getCity().getName() + ', ' + restaurant?.getAddress().getStreetName() + ' ' + restaurant?.getAddress().getBuildingNumber(),
                 foodtype: restaurant?.getFoodtype().getName(),
                 imgUrl: restaurant?.getImage()
             }));
 
-           return {
+            return {
                 restaurants: restaurantsMapped
-           }
+            }
 
         } catch (e) {
             res.status(500);
