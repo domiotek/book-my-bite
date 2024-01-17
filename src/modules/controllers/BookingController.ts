@@ -36,14 +36,13 @@ export default class BookingController {
         const bookingRepo = new BookingRepository();
 
         try {
-        //     const reqQuery = req.query as { id: string };
-        //
-        //     const deleted = await bookingRepo.deleteBooking(+reqQuery.id)
-        //     console.log(deleted)
-            return {};
-        //     return {
-        //         deleted: deleted
-        //     };
+            const reqQuery = req.query as { id: string };
+
+            const deleted = await bookingRepo.deleteBooking(+reqQuery.id);
+
+            return {
+                deleted: deleted
+            };
         } catch (e) {
             res.status(500);
             return {
