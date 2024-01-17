@@ -36,7 +36,7 @@ export default function Login() {
                 newCtx.isUserLoggedIn = true;
                 setAppContext(newCtx);
                 
-                navigate("/home");
+                navigate("/Home");
             }else {
                 const responseBody = await response.json() as SignInEndpoint.IResponse<"Failure">;
 
@@ -46,7 +46,7 @@ export default function Login() {
                         newCtx.isUserLoggedIn = true;
                         setAppContext(newCtx);
                         
-                        navigate("/home");
+                        navigate("/Home");
                     break;
                     case "InvalidCredentials":
                         setError("Niepoprawne dane logowania");
