@@ -49,6 +49,31 @@ export default function App() {
 
 	},[appContext.isUserLoggedIn, appContext.isRestaurantManager]);
 
+	const updateAppContext = (newCtx: IAppContext)=>{
+		if(appContext.selectedRestaurantID!=newCtx.selectedRestaurantID) {
+			if(newCtx.selectedRestaurantID!=null) {
+				sessionStorage.setItem("selectedRestaurantID",newCtx.selectedRestaurantID.toString());
+			}else sessionStorage.removeItem("selectedRestaurantID");
+			
+		}
+
+		setAppContext(newCtx);
+	}
+
+	useEffect(()=>{
+		const selectedRestaurantID = sessionStorage.getItem("selectedRestaurantID");
+
+		if(selectedRestaurantID!==null) {
+			try {
+				const newCtx = Object.assign({},appContext);
+				newCtx.selectedRestaurantID = parseInt(selectedRestaurantID);
+				setAppContext(newCtx);
+			} catch (error: any) {
+				console.error(`Couldn't restore restaurant selection. ${error.message}`);
+			}
+		}
+	},[]);
+
 	useEffect(()=>{
 		const aborter = new AbortController();
 
@@ -69,7 +94,7 @@ export default function App() {
 	
     return (
       <div className={classes.AppWrapper}>
-			<AppContext.Provider value={[appContext, setAppContext]}>
+			<AppContext.Provider value={[appContext, updateAppContext]}>
 				<Header links={links} navStateToggler={()=>setIsNavOpen(!isNavOpen)}/>
 				<FullscreenNav links={links} openState={isNavOpen} hideNav={()=>setIsNavOpen(false)}/>
 				<main>

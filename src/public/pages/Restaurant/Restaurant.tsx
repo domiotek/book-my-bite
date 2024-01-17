@@ -10,6 +10,7 @@ import { AppContext } from '../../App';
 import RestaurantMenuModal from '../../modals/RestaurantMenuModal/RestaurantMenuModal';
 import MakeReservationModal from '../../modals/MakeReservationModal/MakeReservationModal';
 import { Restaurant } from '../../types/api';
+import { useNavigate } from 'react-router-dom';
 
 export default function Restaurant() {
 	const [appContext, setAppContext] = useContext(AppContext);
@@ -23,7 +24,14 @@ export default function Restaurant() {
 		appContext.setModalContent(<MakeReservationModal />);
 	}, []);
 
+	const navigate = useNavigate();
+
 	useEffect(() => {
+
+		if(appContext.selectedRestaurantID==null) {
+			navigate("/Restaurants");
+		}
+
 		const aborter = new AbortController();
 
 		new Promise<void>(async res => {
