@@ -7,6 +7,7 @@ import dateImg from "../../assets/ui/date.svg";
 import peopleImg from "../../assets/ui/people.svg";
 import closeImg from "../../assets/ui/close.svg";
 import { DateTime } from 'luxon';
+import TableMap from '../../components/TableMap/TableMap';
 
 export default function MakeReservationModal() {
 	const {closeModal} = useContext(ModalContext);
@@ -60,7 +61,7 @@ export default function MakeReservationModal() {
 					</div>
 				</div>
 				<div className={classes.TableMapContainer}>
-					<h4>{paramsReady?"Wybierz stolik":""}</h4>
+					<TableMap />
 				</div>
 			</div>
 			<button className={classes.SubmitButton}>Rezerwuj</button>

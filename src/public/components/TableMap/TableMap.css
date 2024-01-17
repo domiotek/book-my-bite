@@ -1,0 +1,36 @@
+.TableMap {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.Host {
+    position: relative;
+}
+
+.Table, .Decor {
+    position: absolute;
+    background: var(--orange-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: rotate(var(--rotate));
+    border-radius: 0.3em;
+}
+
+.Decor {
+    background: transparent;
+    border: solid 3px var(--purple-color-1);
+    color: white;
+}
+
+.Table.Round {
+    border-radius: 50%;
+}
+
+.Table span, .Decor span {
+    transform: rotate(calc(-1 * var(--rotate)));
+    display: block;
+    width: -moz-fit-content;
+    width: fit-content;
+}
