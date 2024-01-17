@@ -49,6 +49,7 @@ model user {
   role          role      @relation(fields: [role_id], references: [role_id])
   bookings      booking[]
   restaurant_managers restaurant_manager[]
+  sessions session[]
 }
 
 model menu {
@@ -114,4 +115,11 @@ model booking {
   datetime   DateTime
   user       user @relation(fields: [user_id], references: [user_id])
   table      table @relation(fields: [table_id], references: [table_id])
+}
+
+model session {
+  session_id String @id
+  user_id Int
+  validUntil DateTime
+  user user @relation(fields: [user_id], references: [user_id])
 }

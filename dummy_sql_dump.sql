@@ -12,8 +12,8 @@ INSERT INTO city (city_id, voivodeship_id, name) VALUES
 INSERT INTO role (name) VALUES ('Customer'), ('Manager');
 
 INSERT INTO "user" (email, password_hash, name, surname, phone, role_id) VALUES 
-('user1@example.com', 'passwordhash1', 'User1', 'Surname1', '0000000001', 2),
-('user2@example.com', 'passwordhash2', 'User2', 'Surname2', '0000000002', 2);
+('user1@example.com', '$2b$10$/Kzy8eANzA5pJjvaSc5d2uyF78fAgqytlySC8TtJAJOGi9/J6Vpfu', 'User1', 'Surname1', '0000000001', 2),
+('user2@example.com', '$2b$10$RaYiaLncJhrqEFFPNNqUnOdItvjKfHz2sZGswZhBU1pon5QNxZjB2', 'User2', 'Surname2', '0000000002', 2);
 
 INSERT INTO address (city_id, street_name, building_number, zip_code) VALUES 
 (1, 'Main Street 1', '31', '31-000'),

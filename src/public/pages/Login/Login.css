@@ -49,6 +49,14 @@
     cursor: pointer;
 }
 
+.login p.ErrorBox {
+    background: #ffecec;
+    border: solid 1px #f3abab;
+    padding: 0.5em 1.25em;
+    border-radius: 0.5em;
+    font-size: 0.9em;
+}
+
 @media screen and (max-width: 999px) {
     .login {
         width: 60%;

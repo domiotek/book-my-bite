@@ -6,6 +6,7 @@ import searchImg from "../../assets/ui/search.svg";
 import classes from './SearchBar.css';
 import { AppContext } from "../../App";
 import { useNavigate } from "react-router-dom";
+import { Foodtype, Location } from "../../types/api";
 
 export default function SearchBar() {
     const [locations, setLocations] = useState<Location[]>([]);
