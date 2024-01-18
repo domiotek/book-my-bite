@@ -18,4 +18,10 @@ const getRestaurant = {
     handler: RestaurantController.getRestaurant
 }
 
-export default [getLocationsAndFoodtypes, getRestaurants, getRestaurant];
+const getRestaurantTableMap = {
+    method: "GET",
+    url: "/api/restaurantTableMap",
+    handler: RestaurantController.getRestaurantTableMap
+}
+
+export default [getLocationsAndFoodtypes, getRestaurants, getRestaurant, getRestaurantTableMap];

@@ -34,7 +34,7 @@ export default class BookingRepository {
             return null;
         }
 
-        const table = new Table(result.table.table_id, restaurant, result.table.table_name, result.table.description, result.table.max_clients_number);
+        const table = new Table(result.table.table_id, restaurant, result.table.table_name, result.table.description, result.table.min_clients, result.table.max_clients);
         return new Booking(result.booking_id, user, table, DateTime.fromJSDate(result.datetime), result.clients);
     }
 
@@ -63,7 +63,7 @@ export default class BookingRepository {
             if (!user) {
                 return null;
             }
-            const table = new Table(record.table_id, restaurant, record.table.table_name, record.table.description, record.table.max_clients_number);
+            const table = new Table(record.table_id, restaurant, record.table.table_name, record.table.description, record.table.min_clients, record.table.max_clients);
             const booking = new Booking(record.booking_id, user, table, DateTime.fromJSDate(record.datetime), record.clients);
             bookings.push(booking);
         }
@@ -101,7 +101,7 @@ export default class BookingRepository {
             if (!user) {
                 return null;
             }
-            const table = new Table(record.table_id, restaurant, record.table.table_name, record.table.description, record.table.max_clients_number);
+            const table = new Table(record.table_id, restaurant, record.table.table_name, record.table.description, record.table.min_clients, record.table.max_clients);
             const booking = new Booking(record.booking_id, user, table, DateTime.fromJSDate(record.datetime), record.clients);
             bookings.push(booking);
         }

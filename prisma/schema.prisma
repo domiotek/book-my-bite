@@ -103,7 +103,8 @@ model table {
   restaurant_id      Int
   table_name         String   @db.VarChar(30)
   description        String   @db.VarChar(255)
-  max_clients_number Int
+  min_clients        Int
+  max_clients        Int
   restaurant         restaurant @relation(fields: [restaurant_id], references: [restaurant_id], onDelete: Cascade)
   bookings           booking[]
 }
