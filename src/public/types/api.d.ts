@@ -26,6 +26,13 @@ interface Restaurant {
     imgUrl: string
 }
 
+interface Reservation {
+    id: number,
+    restaurantName: string,
+    location: string,
+    datetime: string,
+}
+
 type ISuccessResponse<T> = {
     status: "Success"
     data: T
