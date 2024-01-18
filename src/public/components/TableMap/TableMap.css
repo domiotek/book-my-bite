@@ -4,8 +4,29 @@
     overflow: auto;
 }
 
+.TableMap::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+}
+
+.TableMap::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 5em;
+}
+
+.TableMap:hover::-webkit-scrollbar-thumb {
+    background: #f8c29659;
+}
+
+.TableMap::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
 .Host {
     position: relative;
+    margin: 0.5em;
+    scale: 0.85;
 }
 
 .Table, .Decor {
@@ -33,4 +54,10 @@
     display: block;
     width: -moz-fit-content;
     width: fit-content;
+}
+
+@media (pointer:none), (pointer:coarse) {
+    .TableMap::-webkit-scrollbar-thumb {
+        background: #f8c29659;
+    }
 }

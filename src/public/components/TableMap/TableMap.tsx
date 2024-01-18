@@ -45,16 +45,17 @@ export default React.memo(function TableMap() {
 			{ id: 0, type: "Rect", name: "B2", x: 275, y: 255, width: 80, length: 80 },
 			{ id: 0, type: "Rect", name: "B3", x: 445, y: 255, width: 80, length: 80 },
 			{ id: 0, type: "Rect", name: "B4", x: 360, y: 410, width: 80, length: 80 },
-			{ id: 0, type: "Round", name: "B5", x: 360, y: 565, radius: 80},
+			{ id: 0, type: "Rect", name: "B5", x: 360, y: 565, width: 80, length: 80},
 			{ id: 0, type: "Rect", name: "C1", x: 650, y: 100, width: 140, length: 80 },
 			{ id: 0, type: "Rect", name: "C2", x: 650, y: 255, width: 140, length: 80 },
-			{ id: 0, type: "Rect", name: "C3", x: 650, y: 410 , width: 140, length: 80, rotation: 45 },
+			{ id: 0, type: "Rect", name: "C3", x: 650, y: 410 , width: 140, length: 80},
         ],
 		decors: [
 			{x: 360, y: 185, width: 80, height: 220},
 			{x: 160, y: 10, width: 115, height: 30, label: "Drzwi"},
 			{x: 530, y: 10, width: 115, height: 30, label: "Drzwi"},
-			{x: 30, y: 615, width: 110, height: 30, label: "WC"}
+			{x: 30, y: 615, width: 110, height: 30, label: "WC"},
+			{x: 555, y: 615, width: 110, height: 30, label: "TV"}
 		]
     }
 

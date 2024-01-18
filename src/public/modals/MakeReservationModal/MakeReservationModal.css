@@ -27,6 +27,7 @@
     display: flex;
     flex-direction: column;
     padding: 0 1em;
+    overflow-x: hidden;
 }
 
 .ReservationDetails {
@@ -131,6 +132,7 @@
     .TableMapContainer {
         height: 100%;
         margin-left: 4em;
+        width: calc(75% - 4em);
     }
 
     .SubmitButton {
