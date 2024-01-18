@@ -35,7 +35,7 @@ export default class BookingRepository {
         }
 
         const table = new Table(result.table.table_id, restaurant, result.table.table_name, result.table.description, result.table.max_clients_number);
-        return new Booking(result.booking_id, user, table, DateTime.fromJSDate(result.datetime));
+        return new Booking(result.booking_id, user, table, DateTime.fromJSDate(result.datetime), result.clients);
     }
 
     public async getUserBookings(id: number) {
@@ -64,7 +64,7 @@ export default class BookingRepository {
                 return null;
             }
             const table = new Table(record.table_id, restaurant, record.table.table_name, record.table.description, record.table.max_clients_number);
-            const booking = new Booking(record.booking_id, user, table, DateTime.fromJSDate(record.datetime));
+            const booking = new Booking(record.booking_id, user, table, DateTime.fromJSDate(record.datetime), record.clients);
             bookings.push(booking);
         }
 
@@ -102,7 +102,7 @@ export default class BookingRepository {
                 return null;
             }
             const table = new Table(record.table_id, restaurant, record.table.table_name, record.table.description, record.table.max_clients_number);
-            const booking = new Booking(record.booking_id, user, table, DateTime.fromJSDate(record.datetime));
+            const booking = new Booking(record.booking_id, user, table, DateTime.fromJSDate(record.datetime), record.clients);
             bookings.push(booking);
         }
 
@@ -116,7 +116,8 @@ export default class BookingRepository {
                     {
                         user_id: booking.getUser().getID(),
                         table_id: booking.getTable().getID(),
-                        datetime: booking.getDatetime().toJSDate()
+                        datetime: booking.getDatetime().toJSDate(),
+                        clients: booking.getClients()
                     }
                 ]
             });

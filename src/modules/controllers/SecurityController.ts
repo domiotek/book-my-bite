@@ -64,6 +64,10 @@ export default class SecurityController {
         return result;
     }
 
+    public static async register(req: FastifyRequest, res: FastifyReply) {
+
+    }
+
     public static async checkSignInStatus(req: FastifyRequest) {
         return {
             status: "Success",

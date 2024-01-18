@@ -115,6 +115,7 @@ model booking {
   datetime   DateTime
   user       user @relation(fields: [user_id], references: [user_id])
   table      table @relation(fields: [table_id], references: [table_id])
+  clients    Int
 }
 
 model session {
