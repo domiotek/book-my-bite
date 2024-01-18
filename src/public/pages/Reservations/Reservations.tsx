@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { DateTime } from 'luxon';
+import React, { useEffect, useState } from 'react'
 import locationImg from "../../assets/ui/location-orange.svg";
 import deleteImg from '../../assets/ui/delete.svg';
 
 import classes from './Reservations.css';
 import { Reservation } from '../../types/api';
+import NoData from '../../components/NoData/NoData';
 
 export default function Reservations() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
@@ -67,6 +67,9 @@ export default function Reservations() {
         <h2>Twoje rezerwacje: </h2>
       </div>
       {
+        reservations.length === 0 ? (
+          <NoData />
+        ) :
         reservations.map((reservation) => (
           <div key={reservation.id} className={classes.reservation}>
             <div className={classes.restaurantInfo}>

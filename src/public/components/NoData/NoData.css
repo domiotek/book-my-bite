@@ -1,0 +1,10 @@
+.noData {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.noData img {
+    width: 100%;
+}

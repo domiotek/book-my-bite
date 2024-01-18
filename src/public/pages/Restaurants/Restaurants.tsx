@@ -8,6 +8,7 @@ import foodtypeImg from "../../assets/ui/foodtype-orange.svg";
 import { AppContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { Restaurants } from '../../types/api';
+import NoData from '../../components/NoData/NoData';
 
 export default function Restaurants() {
 	const [appContext, setAppContext] = useContext(AppContext);
@@ -50,19 +51,22 @@ export default function Restaurants() {
 		<div className={classes.RestaurantsPage}>
 			<SearchBar />
 
-			<div className={classes.RestaurantsWrapper}>
+			<div className={classes.RestaurantsWrapper} style={{ gridTemplateColumns: restaurants.length === 0 ? 'auto' : 'repeat(auto-fit, minmax(400px, 1fr))'}}>
 				{
+					restaurants.length === 0 ? (
+						<NoData />
+					) :
 					restaurants.map(rest =>
 						<div key={rest.id} className={classes.RestaurantPanel} onClick={() => onSearch(rest.id)}>
 							<div className={classes.Image} style={{ "--image-url": `url(/ilustrations/${rest.imgUrl})` } as CSSProperties} />
 							<h3>{rest.name}</h3>
 							<ul>
 								<li>
-									<img src={locationImg} alt="" />
+									<img src={locationImg} alt="location" />
 									<span>{rest.location}</span>
 								</li>
 								<li>
-									<img src={foodtypeImg} alt="" />
+									<img src={foodtypeImg} alt="foodtype" />
 									<span>{rest.foodtype}</span>
 								</li>
 							</ul>
