@@ -46,7 +46,7 @@ export default class BookingController {
         const bookingRepo = new BookingRepository();
 
         try {
-            const reqQuery = req.query as { id: string };
+            const reqQuery = req.params as { id: string };
 
             const deleted = await bookingRepo.deleteBooking(+reqQuery.id);
 

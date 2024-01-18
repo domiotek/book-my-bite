@@ -33,6 +33,34 @@ export default function Reservations() {
     return ()=>aborter.abort();
   }, []);
 
+  async function deleteReservation(id: number) {
+    
+    if (!confirm('Are you sure to cancel this reservation? ')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/deleteBooking/${id}`, {method: 'DELETE'});
+
+      if (!response.ok) {
+        console.log('Cannot reach canceling reservation response');
+        return;
+      }
+
+      const data = await response.json();
+
+      if (!data.deleted) {
+        alert('Przepraszamy, nie udało się anulować rezerwacji, spróbuj ponownie później');
+        return;
+      }
+
+      setReservations(reservations.filter((reservation => reservation.id !== id)));
+
+    } catch (e) {
+      console.log('Error in canceling reservation: ', e);
+    }
+  }
+
   return (
     <div className={classes.reservations}>
       <div className={classes.header}>
@@ -49,7 +77,7 @@ export default function Reservations() {
               </p>
             </div>
             <h3>{reservation.datetime}</h3>
-            <button type='button'><img src={deleteImg} alt="delete" /></button>
+            <button type='button'><img src={deleteImg} alt="delete" onClick={() => deleteReservation(reservation.id)} /></button>
           </div>
         ))
       }
