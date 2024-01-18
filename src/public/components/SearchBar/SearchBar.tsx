@@ -48,6 +48,7 @@ export default function SearchBar() {
 
                 if (!response.ok) {
                     console.log('Cannot reach locations and foodtypes response');
+                    return;
                 }
 
                 const data = await response.json();

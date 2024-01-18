@@ -37,12 +37,28 @@
     align-items: center;
     transform: rotate(var(--rotate));
     border-radius: 0.3em;
+    color: white;
+}
+
+.Table {
+    cursor: pointer;
+    transition: background 0.4s, border 0.4s;
+    border: solid 3px var(--orange-color);
+}
+
+.Table.Selected {
+    background: transparent;
+}
+
+.Table.Disabled {
+    background: lightgray;
+    border: solid 3px lightgray;
+    cursor: default;
 }
 
 .Decor {
     background: transparent;
     border: solid 3px var(--purple-color-1);
-    color: white;
 }
 
 .Table.Round {
@@ -54,6 +70,7 @@
     display: block;
     width: -moz-fit-content;
     width: fit-content;
+    text-align: center;
 }
 
 @media (pointer:none), (pointer:coarse) {

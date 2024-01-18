@@ -23,7 +23,8 @@ export default function Restaurants() {
 				const response = await fetch(`/api/restaurants?city=${appContext.filters.city}&name=${appContext.filters.name}&foodType=${appContext.filters.foodType}`, { signal: aborter.signal });
 
 				if (!response.ok) {
-					console.log('Cannot reach restaurants response')
+					console.log('Cannot reach restaurants response');
+					return;
 				}
 
 				const data = await response.json();

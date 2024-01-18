@@ -9,8 +9,10 @@ interface IRectTableData {
 	x: number
 	y: number
 	width: number
-	length: number
+	height: number
 	rotation?: number
+	minPeople: number
+	maxPeople: number
 }
 
 interface IRoundTableData {
@@ -20,6 +22,8 @@ interface IRoundTableData {
 	x: number
 	y: number
 	radius: number
+	minPeople: number
+	maxPeople: number
 }
 
 interface IDecorData {
@@ -32,43 +36,34 @@ interface IDecorData {
 
 type ITableData = IRoundTableData | IRectTableData;
 
-export default React.memo(function TableMap() {
+export interface ITableMapDefinition {
+	width: number, 
+	height: number, 
+	tables: ITableData[], 
+	decors: IDecorData[]
+}
 
-    const mockTableData: {width: number, height: number, tables: ITableData[], decors: IDecorData[]} = {
-        width: 800,
-        height: 600,
-        tables: [
-            { id: 0, type: "Rect", name: "A1", x: 10, y: 100, width: 140, length: 80 },
-			{ id: 0, type: "Rect", name: "A2", x: 10, y: 255, width: 140, length: 80},
-			{ id: 0, type: "Rect", name: "A3", x: 10, y: 410, width: 140, length: 80 },
-			{ id: 0, type: "Rect", name: "B1", x: 360, y: 100, width: 80, length: 80 },
-			{ id: 0, type: "Rect", name: "B2", x: 275, y: 255, width: 80, length: 80 },
-			{ id: 0, type: "Rect", name: "B3", x: 445, y: 255, width: 80, length: 80 },
-			{ id: 0, type: "Rect", name: "B4", x: 360, y: 410, width: 80, length: 80 },
-			{ id: 0, type: "Rect", name: "B5", x: 360, y: 565, width: 80, length: 80},
-			{ id: 0, type: "Rect", name: "C1", x: 650, y: 100, width: 140, length: 80 },
-			{ id: 0, type: "Rect", name: "C2", x: 650, y: 255, width: 140, length: 80 },
-			{ id: 0, type: "Rect", name: "C3", x: 650, y: 410 , width: 140, length: 80},
-        ],
-		decors: [
-			{x: 360, y: 185, width: 80, height: 220},
-			{x: 160, y: 10, width: 115, height: 30, label: "Drzwi"},
-			{x: 530, y: 10, width: 115, height: 30, label: "Drzwi"},
-			{x: 30, y: 615, width: 110, height: 30, label: "WC"},
-			{x: 555, y: 615, width: 110, height: 30, label: "TV"}
-		]
-    }
+interface ITableMapProps {
+	tableMap: ITableMapDefinition
+	selectedTableID: number
+	setSelectedTableID: (ID: number)=>void
+	numOfPeople: number
+}
+
+export default React.memo(function TableMap({tableMap, selectedTableID, setSelectedTableID, numOfPeople}: ITableMapProps) {
 
 	return (
 		<div className={classes.TableMap}>
-			<div className={classes.Host} style={{height: mockTableData.height, width: mockTableData.width}}>
+			<div className={classes.Host} style={{height: tableMap.height, width: tableMap.width}}>
 			{
-				mockTableData.tables.map(table=>
-					<Table key={table.id} table={table}/>
-				)
+				tableMap.tables.map(table=>{
+					const state = selectedTableID==table.id?"Selected":(numOfPeople>table.maxPeople||numOfPeople<table.minPeople?"Disabled":"Neutral");
+
+					return <Table key={table.id} table={table} clickHandler={()=>setSelectedTableID(table.id)} state={state}/>
+				})
 			}
 			{
-				mockTableData.decors.map((decor, i)=>
+				tableMap.decors.map((decor, i)=>
 					<Decor key={i} decor={decor} />
 				)
 			}
@@ -79,20 +74,36 @@ export default React.memo(function TableMap() {
 
 interface ITableProps {
 	table: ITableData
+	state: "Neutral" | "Disabled" | "Selected"
+	clickHandler: ()=>void
 }
 
-const Table = React.memo(function Table({table}: ITableProps) {
+const Table = React.memo(function Table({table,state, clickHandler}: ITableProps) {
 
 	if(table.type=="Rect") {
 		return (
-			<div className={classes.Table} style={{left:`${table.x}px`, top: `${table.y}px`, width: `${table.width}px`, height: `${table.length}px`, "--rotate": table.rotation?`${table.rotation}deg`:""} as CSSProperties}>
-				<span>{table.name}</span>
+			<div className={`${classes.Table} ${state=="Selected"?classes.Selected:""} ${state==="Disabled"?classes.Disabled:""}`} 
+				onClick={state!="Disabled"?clickHandler:undefined} 
+				style={{
+					left:`${table.x}px`, 
+					top: `${table.y}px`, 
+					width: `${table.width}px`, 
+					height: `${table.height}px`, 
+					"--rotate": table.rotation?`${table.rotation}deg`:""} as CSSProperties
+				}>
+					<span>{table.name}<br></br>{table.minPeople} - {table.maxPeople}</span>
 			</div>
 		)
 	}else {
 		return (
-			<div className={`${classes.Table} ${classes.Round}`} style={{left:`${table.x}px`, top: `${table.y}px`, width: `${table.radius}px`, height: `${table.radius}px`}}>
-				<span>{table.name}</span>
+			<div className={`${classes.Table} ${classes.Round} ${state=="Selected"?classes.Selected:""} ${state==="Disabled"?classes.Disabled:""}`} 
+				style={{
+					left:`${table.x}px`, 
+					top: `${table.y}px`, 
+					width: `${table.radius}px`, 
+					height: `${table.radius}px`
+				}}>
+					<span>{table.name}<br></br>{table.minPeople} - {table.maxPeople}</span>
 			</div>
 		)
 	}
