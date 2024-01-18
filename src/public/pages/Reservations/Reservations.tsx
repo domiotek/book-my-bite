@@ -33,27 +33,6 @@ export default function Reservations() {
     return ()=>aborter.abort();
   }, []);
 
-  const mockReservatons = [
-    {
-      id: 1,
-      name: 'Tomasza 20 Restro Bar',
-      location: 'Kraków, Świętego Tomasza 20',
-      datetime: DateTime.fromObject({day: 15, month: 1, year: 2024, minute: 0, hour: 14}).toFormat('dd-MM-yyyy HH:mm'),
-    },
-    {
-      id: 2,
-      name: 'Tomasza 20 Restro Bar',
-      location: 'Kraków, Świętego Tomasza 20',
-      datetime: DateTime.fromObject({day: 16, month: 1, year: 2024, minute: 30, hour: 12}).toFormat('dd-MM-yyyy HH:mm'),
-    },
-    {
-      id: 3,
-      name: 'Tomasza 20 Restro Bar',
-      location: 'Kraków, Świętego Tomasza 20',
-      datetime: DateTime.fromObject({day: 17, month: 1, year: 2024, minute: 0, hour: 18}).toFormat('dd-MM-yyyy HH:mm'),
-    },
-  ]
-
   return (
     <div className={classes.reservations}>
       <div className={classes.header}>
