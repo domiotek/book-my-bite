@@ -79,6 +79,11 @@ export namespace TableMap {
     
     type ITableData = IRoundTableData | IRectTableData;
 
+    interface ITableAvailability {
+        id: number
+        state: "Reserved" | "Free"
+    }
+
     interface ITableMapDefinition {
         width: number, 
         height: number, 
@@ -110,6 +115,7 @@ export namespace GetTableMapEndpoint {
 
     type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<TableMap.ITableMapDefinition,"NoEntity", T>
 }
+
 
 
 

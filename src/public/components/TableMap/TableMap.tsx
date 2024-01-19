@@ -5,6 +5,7 @@ import { TableMap } from '../../types/api';
 
 interface ITableMapProps {
 	tableMap: TableMap.ITableMapDefinition
+	availabilityData: TableMap.ITableAvailability[]
 	selectedTableID: number
 	setSelectedTableID: (ID: number)=>void
 	numOfPeople: number
@@ -12,7 +13,7 @@ interface ITableMapProps {
 
 interface ITableProps {
 	table: TableMap.ITableData
-	state: "Neutral" | "Disabled" | "Selected"
+	state: "Neutral" | "Disabled" | "Selected" | "Reserved";
 	clickHandler: ()=>void
 }
 
@@ -20,14 +21,21 @@ interface IDecorProps {
 	decor: TableMap.IDecorData
 }
 
-export default React.memo(function TableMap({tableMap, selectedTableID, setSelectedTableID, numOfPeople}: ITableMapProps) {
+export default React.memo(function TableMap({tableMap, availabilityData, selectedTableID, setSelectedTableID, numOfPeople}: ITableMapProps) {
 
 	return (
 		<div className={classes.TableMap}>
 			<div className={classes.Host} style={{height: tableMap.height, width: tableMap.width}}>
 			{
 				tableMap.tables.map(table=>{
-					const state = selectedTableID==table.id?"Selected":(numOfPeople>table.maxPeople||numOfPeople<table.minPeople?"Disabled":"Neutral");
+					let state: "Selected" | "Disabled" | "Reserved" | "Neutral";
+
+					switch(true) {
+						case selectedTableID==table.id: state = "Selected"; break;
+						case availabilityData.filter(availData=>availData.id==table.id)[0]?.state=="Reserved": state = "Reserved"; break;
+						case numOfPeople>table.maxPeople||numOfPeople<table.minPeople: state = "Disabled"; break;
+						default: state="Neutral";
+					}
 
 					return <Table key={table.id} table={table} clickHandler={()=>setSelectedTableID(table.id)} state={state}/>
 				})
@@ -46,8 +54,8 @@ const Table = React.memo(function Table({table,state, clickHandler}: ITableProps
 
 	if(table.type=="Rect") {
 		return (
-			<div className={`${classes.Table} ${state=="Selected"?classes.Selected:""} ${state==="Disabled"?classes.Disabled:""}`} 
-				onClick={state!="Disabled"?clickHandler:undefined} 
+			<div className={`${classes.Table} ${state=="Selected"?classes.Selected:""} ${state==="Disabled"?classes.Disabled:""} ${state==="Reserved"?classes.Reserved:""}`} 
+				onClick={state=="Neutral"?clickHandler:undefined} 
 				style={{
 					left:`${table.x}px`, 
 					top: `${table.y}px`, 
@@ -60,7 +68,8 @@ const Table = React.memo(function Table({table,state, clickHandler}: ITableProps
 		)
 	}else {
 		return (
-			<div className={`${classes.Table} ${classes.Round} ${state=="Selected"?classes.Selected:""} ${state==="Disabled"?classes.Disabled:""}`} 
+			<div className={`${classes.Table} ${classes.Round} ${state=="Selected"?classes.Selected:""} ${state==="Disabled"?classes.Disabled:""} ${state==="Reserved"?classes.Reserved:""}`} 
+				onClick={state=="Neutral"?clickHandler:undefined} 
 				style={{
 					left:`${table.x}px`, 
 					top: `${table.y}px`, 

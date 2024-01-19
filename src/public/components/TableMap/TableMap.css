@@ -56,6 +56,11 @@
     cursor: default;
 }
 
+.Table.Reserved {
+    background: repeating-linear-gradient(-45deg, var(--purple-color-1) 0, transparent 10px);
+    border: solid 3px lightgray;
+}
+
 .Decor {
     background: transparent;
     border: solid 3px var(--purple-color-1);

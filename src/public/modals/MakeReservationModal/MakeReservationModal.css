@@ -22,12 +22,37 @@
     background: none!important;
 }
 
+.DefaultView, .LoadingView, .ErrorView  {
+    display: flex;
+    flex-direction: column;
+}
+
+.DefaultView {
+    overflow: hidden;
+}
+
+.LoadingView, .ErrorView {
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.ErrorView img {
+    width: 50%;
+}
+
+.ErrorView h3 {
+    color: white;
+    margin-top: 1em;
+}
+
 .ReservationPanel {
     flex: 1;
     display: flex;
     flex-direction: column;
     padding: 0 1em;
     overflow-x: hidden;
+    justify-content: space-around;
 }
 
 .ReservationDetails {
@@ -93,12 +118,13 @@
     width: 100%;
     height: 270px;
     border-radius: 0.5em;
+    position: relative;
 }
 
 .TableMapContainer > h4 {
     color: white;
     text-align: center;
-    margin: 1em;
+    margin-top: 2em;
 }
 
 .SubmitButton {
@@ -108,16 +134,39 @@
     font-size: 1em;
     font-weight: bold;
     border: solid 1px var(--orange-color);
+    transition: background 0.4s, border 0.4s;
 }
 
 .SubmitButton:hover {
     background: transparent;
 }
 
+.SubmitButton:disabled {
+    background: lightgray;
+    border: solid 1px lightgray;
+}
+
+.LoadingCover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: #00000091;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: inherit;
+}
+
 @media screen and (min-width: 1025px) {
 
     .ModalWrapper {
-        min-width: 1000px;
+        min-width: 900px;
+    }
+
+    .ErrorView img {
+        width: 30%;
     }
 
     .Header {

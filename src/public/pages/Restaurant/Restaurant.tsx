@@ -21,7 +21,7 @@ export default function Restaurant() {
 	}, []);
 
 	const showReservationModalAction = useCallback(() => {
-		appContext.setModalContent(<MakeReservationModal />);
+		appContext.setModalContent(<MakeReservationModal selectedRestaurantID={appContext.selectedRestaurantID as number}/>);
 	}, []);
 
 	const navigate = useNavigate();
