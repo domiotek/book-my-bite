@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import FoodTypeRepository from '../repositories/FoodtypeRepository.js';
 import LocationRepository from '../repositories/LocationRepository.js';
 import RestaurantRepository from '../repositories/RestaurantRepository.js';
-import TableRepository from "../repositories/TableRepository";
+import TableRepository from "../repositories/TableRepository.js";
 
 interface IRestaurantFilterOptions {
     city: string

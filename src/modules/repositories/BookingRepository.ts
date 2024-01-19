@@ -71,7 +71,7 @@ export default class BookingRepository {
         return bookings;
     }
 
-    public async getRestaurantBookings(restaurant: Restaurant, datetime: DateTime) {
+    public async getRestaurantBookings(restaurant_id: number, datetime: DateTime) {
         const bookingRecords = await global.app.orm.booking.findMany({
             include: {
                 table: true
@@ -82,7 +82,7 @@ export default class BookingRepository {
                     lte: datetime.startOf("day").plus({day: 1}).toJSDate(),
                 },
                 table: {
-                    restaurant_id: restaurant.getID()
+                    restaurant_id: restaurant_id
                 }
             }
         })
