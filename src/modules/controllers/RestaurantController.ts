@@ -2,7 +2,10 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import FoodTypeRepository from '../repositories/FoodtypeRepository.js';
 import LocationRepository from '../repositories/LocationRepository.js';
 import RestaurantRepository from '../repositories/RestaurantRepository.js';
-import TableRepository from "../repositories/TableRepository";
+import TableRepository from "../repositories/TableRepository.js";
+import { GetTableMapEndpoint, TableMap } from '../../public/types/api.js';
+import Table from '../models/Table.js';
+import Output from '../Output.js';
 
 interface IRestaurantFilterOptions {
     city: string
@@ -81,25 +84,37 @@ export default class RestaurantController {
         const restaurantRepo = new RestaurantRepository();
         const tableRepo = new TableRepository();
 
+        let result: GetTableMapEndpoint.IResponse = {
+            status: "Failure",
+            errCode: "DBError"
+        }
+
         try {
-            const reqQuery = req.query as { id: string };
+            const reqQuery = req.query as GetTableMapEndpoint.IRequest;
+            let restaurantID;
 
-            const restaurant = await restaurantRepo.getRestaurantByID(+reqQuery.id);
+            if(!reqQuery.id||(isNaN(restaurantID=parseInt(reqQuery.id)))) {
+                res.status(400);
+                result.errCode = "BadRequest";
+                result.message = reqQuery.id?"Invalid id":"Missing id";
 
-            if (!restaurant) {
-                return null;
+                return result;
             }
 
-            const tableMap = restaurant?.getTablemap();
+            const restaurant = await restaurantRepo.getRestaurantByID(restaurantID);
 
-            if (!tableMap) {
-                return null;
+            if(!restaurant) {
+                res.status(404);
+                result.errCode = "NoEntity";
+                result.message = "Such restaurant doesn't exist";
+
+                return result;
             }
 
-            const restaurantTables = await tableRepo.getRestaurantTables(restaurant.getID());
-            if (!restaurantTables) {
-                return null;
-            }
+            const tableMap = restaurant.getTablemap();
+
+            //getRestaurantTables returns null only if there is no restaurant with such id, we checked for that earlier.
+            const restaurantTables = await tableRepo.getRestaurantTables(restaurant.getID()) as Table[];
 
             const tableMapWithClients = tableMap.tables.map(table => {
                 const temp = restaurantTables.filter(tab => tab.getID() === table.id)[0];
@@ -112,13 +127,15 @@ export default class RestaurantController {
             });
 
             return {
-                tablemap: tableMapWithClients
+                status: "Success",
+                data: Object.assign({}, tableMap, {tables: tableMapWithClients})
             }
-        } catch (e) {
-            console.log(e);
+        } catch (e: any) {
+            Output.init().bg("red").fg("white").print(`[Endpoint Error][${this.name}] ${e.message}`);
             res.status(500);
             return {
-                error: e
+                status: "Failure",
+                errCode: "DBError"
             }
         }
     }
