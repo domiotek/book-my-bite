@@ -1,53 +1,23 @@
 import React, { CSSProperties } from 'react'
 
 import classes from "./TableMap.css";
-
-interface IRectTableData {
-	type: "Rect"
-	id: number,
-	name: string
-	x: number
-	y: number
-	width: number
-	height: number
-	rotation?: number
-	minPeople: number
-	maxPeople: number
-}
-
-interface IRoundTableData {
-	type: "Round"
-	id: number
-	name: string
-	x: number
-	y: number
-	radius: number
-	minPeople: number
-	maxPeople: number
-}
-
-interface IDecorData {
-	x: number
-	y: number
-	width: number
-	height: number
-	label?: string
-}
-
-type ITableData = IRoundTableData | IRectTableData;
-
-export interface ITableMapDefinition {
-	width: number, 
-	height: number, 
-	tables: ITableData[], 
-	decors: IDecorData[]
-}
+import { TableMap } from '../../types/api';
 
 interface ITableMapProps {
-	tableMap: ITableMapDefinition
+	tableMap: TableMap.ITableMapDefinition
 	selectedTableID: number
 	setSelectedTableID: (ID: number)=>void
 	numOfPeople: number
+}
+
+interface ITableProps {
+	table: TableMap.ITableData
+	state: "Neutral" | "Disabled" | "Selected"
+	clickHandler: ()=>void
+}
+
+interface IDecorProps {
+	decor: TableMap.IDecorData
 }
 
 export default React.memo(function TableMap({tableMap, selectedTableID, setSelectedTableID, numOfPeople}: ITableMapProps) {
@@ -71,12 +41,6 @@ export default React.memo(function TableMap({tableMap, selectedTableID, setSelec
 		</div>
 	)
 });
-
-interface ITableProps {
-	table: ITableData
-	state: "Neutral" | "Disabled" | "Selected"
-	clickHandler: ()=>void
-}
 
 const Table = React.memo(function Table({table,state, clickHandler}: ITableProps) {
 
@@ -109,10 +73,6 @@ const Table = React.memo(function Table({table,state, clickHandler}: ITableProps
 	}
     
 });
-
-interface IDecorProps {
-	decor: IDecorData
-}
 
 const Decor = React.memo(function Decor({decor}: IDecorProps) {
 	return (

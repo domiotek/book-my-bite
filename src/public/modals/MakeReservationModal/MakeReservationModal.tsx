@@ -7,7 +7,8 @@ import dateImg from "../../assets/ui/date.svg";
 import peopleImg from "../../assets/ui/people.svg";
 import closeImg from "../../assets/ui/close.svg";
 import { DateTime } from 'luxon';
-import TableMap, { ITableMapDefinition } from '../../components/TableMap/TableMap';
+import TableMap from '../../components/TableMap/TableMap';
+import { TableMap as TableMapTypes } from '../../types/api';
 
 export default function MakeReservationModal() {
 	const {closeModal} = useContext(ModalContext);
@@ -16,7 +17,7 @@ export default function MakeReservationModal() {
 	const [timeSlot, setTimeSlot] = useState<string>("");
 	const [tableSize, setTableSize] = useState<number>(0);
 	const [selectedTable, setSelectedTable] = useState<number>(-1);
-	const [tableMap, setTableMap] = useState<ITableMapDefinition | null>(null);
+	const [tableMap, setTableMap] = useState<TableMapTypes.ITableMapDefinition | null>(null);
 
 	const [paramsReady, setParamsReady] = useState<boolean>(false);
 
