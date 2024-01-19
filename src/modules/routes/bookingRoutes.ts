@@ -12,4 +12,10 @@ const deleteBooking = {
     handler: BookingController.deleteBooking
 }
 
-export default [getUserBookings, deleteBooking];
+const createBooking = {
+    method: "POST",
+    url: "/api/createBooking",
+    handler: BookingController.createBooking
+}
+
+export default [getUserBookings, deleteBooking, createBooking];
