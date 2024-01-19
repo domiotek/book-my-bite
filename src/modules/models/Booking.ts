@@ -8,12 +8,14 @@ export default class Booking {
     private user: User;
     private table: Table
     private datetime: DateTime;
+    private clients: number;
 
-    constructor(id: number, user: User, table: Table, datetime: DateTime) {
+    constructor(id: number, user: User, table: Table, datetime: DateTime, clients: number) {
         this.id=id;
         this.user = user;
         this.table = table;
         this.datetime = datetime;
+        this.clients = clients;
     }
 
     public getID(): number {
@@ -32,6 +34,10 @@ export default class Booking {
         return this.datetime;
     }
 
+    public getClients(): number {
+        return this.clients;
+    }
+
     public setUser(user: User): void {
         this.user = user;
     }
@@ -44,4 +50,7 @@ export default class Booking {
         this.datetime = datetime;
     }
 
+    public setClients(clients: number): void {
+        this.clients = clients
+    }
 }

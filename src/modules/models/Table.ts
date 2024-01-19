@@ -6,14 +6,16 @@ export default class Table {
     private restaurant: Restaurant;
     private name: string;
     private description: string;
-    private maxClientsNumber: number;
+    private minClients: number;
+    private maxClients: number;
 
-    constructor(id: number, restaurant: Restaurant, name: string, description: string, maxClientsNumber: number) {
+    constructor(id: number, restaurant: Restaurant, name: string, description: string, minClients: number, maxClients: number) {
         this.id = id;
         this.restaurant = restaurant;
         this.name = name;
         this.description = description;
-        this.maxClientsNumber = maxClientsNumber;
+        this.minClients = minClients;
+        this.maxClients = maxClients;
     }
 
     public getID(): number {
@@ -32,8 +34,12 @@ export default class Table {
         return this.description;
     }
 
-    public getMaxClientsNumber(): number {
-        return this.maxClientsNumber;
+    public getMinClients(): number {
+        return this.minClients;
+    }
+
+    public getMaxClients(): number {
+        return this.maxClients;
     }
 
     public setRestaurant(restaurant: Restaurant): void {
@@ -48,8 +54,11 @@ export default class Table {
         this.description = description;
     }
 
-    public setMaxClientsNumber(maxClientsNumber: number): void {
-        this.maxClientsNumber = maxClientsNumber;
+    public setMinClients(minClients: number): void {
+        this.minClients = minClients;
     }
 
+    public setMaxClients(maxClients: number): void {
+        this.maxClients = maxClients;
+    }
 }

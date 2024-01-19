@@ -13,9 +13,7 @@ export default class BookingController {
 
             const bookingsMapped = bookings?.map((booking) => ({
                 id: booking.getID(),
-                tableName: booking.getTable().getName(),
-                tableDesc: booking.getTable().getDescription(),
-                maxClients: booking.getTable().getMaxClientsNumber(),
+                clients: booking.getClients(),
                 restaurantName: booking.getTable().getRestaurant().getName(),
                 location: booking.getTable().getRestaurant().getAddress().getCity().getName() + " " + booking.getTable().getRestaurant().getAddress().getStreetName() + " " + booking.getTable().getRestaurant().getAddress().getBuildingNumber(),
                 datetime: booking.getDatetime().toFormat("dd-MM-yyyy HH:mm")

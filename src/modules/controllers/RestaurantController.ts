@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import FoodTypeRepository from '../repositories/FoodtypeRepository.js';
 import LocationRepository from '../repositories/LocationRepository.js';
 import RestaurantRepository from '../repositories/RestaurantRepository.js';
+import TableRepository from "../repositories/TableRepository";
 
 interface IRestaurantFilterOptions {
     city: string
@@ -69,6 +70,52 @@ export default class RestaurantController {
             }
 
         } catch (e) {
+            res.status(500);
+            return {
+                error: e
+            }
+        }
+    }
+
+    public static async getRestaurantTableMap(req: FastifyRequest, res: FastifyReply) {
+        const restaurantRepo = new RestaurantRepository();
+        const tableRepo = new TableRepository();
+
+        try {
+            const reqQuery = req.query as { id: string };
+
+            const restaurant = await restaurantRepo.getRestaurantByID(+reqQuery.id);
+
+            if (!restaurant) {
+                return null;
+            }
+
+            const tableMap = restaurant?.getTablemap();
+
+            if (!tableMap) {
+                return null;
+            }
+
+            const restaurantTables = await tableRepo.getRestaurantTables(restaurant.getID());
+            if (!restaurantTables) {
+                return null;
+            }
+
+            const tableMapWithClients = tableMap.tables.map(table => {
+                const temp = restaurantTables.filter(tab => tab.getID() === table.id)[0];
+
+                return {
+                    ...table,
+                    minPeople: temp.getMinClients(),
+                    maxPeople: temp.getMaxClients()
+                }
+            });
+
+            return {
+                tablemap: tableMapWithClients
+            }
+        } catch (e) {
+            console.log(e);
             res.status(500);
             return {
                 error: e

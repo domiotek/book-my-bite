@@ -2,6 +2,33 @@ import Address from "./Address";
 import Foodtype from "./Foodtype";
 import Menu from "./Menu";
 
+interface IDecor {
+    x: number,
+    y: number,
+    label?: string,
+    width: number,
+    height: number
+}
+
+interface ITable {
+    x: number,
+    y: number,
+    id: number,
+    name: string,
+    type: string,
+    width: number,
+    height: number,
+    minPeople?: number,
+    maxPeople?: number
+}
+
+interface ITableMap {
+    width: number,
+    height: number,
+    tables: ITable[]
+    decors: IDecor[]
+}
+
 export default class Restaurant {
     private id: number;
     private name: string;
@@ -10,9 +37,9 @@ export default class Restaurant {
     private foodtype: Foodtype;
     private address: Address;
     private image: string;
-    private tablemap: object;
+    private tablemap: ITableMap;
 
-    constructor(id: number, name: string, description: string, menu: Menu, foodtype: Foodtype, address: Address, image: string, tablemap: object) {
+    constructor(id: number, name: string, description: string, menu: Menu, foodtype: Foodtype, address: Address, image: string, tablemap: ITableMap) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -47,7 +74,7 @@ export default class Restaurant {
         return this.address;
     }
 
-    public getTablemap(): object {
+    public getTablemap(): ITableMap {
         return this.tablemap;
     }
 
@@ -75,7 +102,7 @@ export default class Restaurant {
         this.address = address;
     }
 
-    public setTablemap(tableMap: object): void {
+    public setTablemap(tableMap: ITableMap): void {
         this.tablemap = tableMap;
     }
 
