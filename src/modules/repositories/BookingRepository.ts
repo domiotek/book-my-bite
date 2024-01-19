@@ -109,15 +109,15 @@ export default class BookingRepository {
         return bookings;
     }
 
-    public async createBooking(booking: Booking) {
+    public async createBooking(user_id: number, table_id: number, datetime: DateTime, clients: number) {
         try {
             await global.app.orm.booking.createMany({
                 data: [
                     {
-                        user_id: booking.getUser().getID(),
-                        table_id: booking.getTable().getID(),
-                        datetime: booking.getDatetime().toJSDate(),
-                        clients: booking.getClients()
+                        user_id: user_id,
+                        table_id: table_id,
+                        datetime: datetime.toJSDate(),
+                        clients: clients
                     }
                 ]
             });
