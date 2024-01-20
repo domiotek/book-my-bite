@@ -65,7 +65,30 @@ export default class SecurityController {
     }
 
     public static async register(req: FastifyRequest, res: FastifyReply) {
+        //create function to register user and log him in
+        const data = req.body as {name: string, surname: string, phone: string, email: string, password: string};
 
+        const user = await SecurityController.userRepository.getUserByEmail(data.email);
+
+        if(user) {
+            return {
+                status: "Failure",
+                errCode: "UserAlreadyExists"
+            }
+        }
+
+        const hashedPassword = await hash(data.password, 10);
+
+        const result = await SecurityController.userRepository.createUser(data.email, hashedPassword, data.name, data.surname, data.phone);
+
+        if(result) {
+            return await SecurityController.signInUser(req, res);
+        }
+
+        return {
+            status: "Failure",
+            errCode: "DBError"
+        }
     }
 
     public static async checkSignInStatus(req: FastifyRequest) {
