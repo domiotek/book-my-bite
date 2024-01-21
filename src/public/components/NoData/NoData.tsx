@@ -8,7 +8,7 @@ export default function NoData() {
     return (
         <div className={classes.noData}>
             <img src={emptyImg} alt="empty" />
-            <p>Brak rezerwacji</p>
+            <p>Brak wyników</p>
         </div>
     )
 }
