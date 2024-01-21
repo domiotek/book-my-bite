@@ -86,7 +86,7 @@ export default class TableController {
 
             result = {
                 status: "Failure",
-                errCode: "DBError",
+                errCode: "InternalError",
                 message: e.message
             }
 

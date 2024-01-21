@@ -51,7 +51,7 @@ export default function Login() {
                     case "InvalidCredentials":
                         setError("Niepoprawne dane logowania");
                     break;
-                    case "DBError":
+                    case "InternalError":
                         setError("Coś poszło nie tak, spróbuj ponownie.");
                     break;
                 }

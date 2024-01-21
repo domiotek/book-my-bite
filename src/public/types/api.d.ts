@@ -39,10 +39,10 @@ type IFailureResponse<T> = {
 
 type TResponseTypes = "Success" | "Failure" | "Either";
 
-type IAPIResponse<D=undefined, E="DBError", T extends TResponseTypes="Either"> = 
+type IAPIResponse<D=undefined, E="InternalError", T extends TResponseTypes="Either"> = 
         (T extends "Success" | "Either"?ISuccessResponse<D>:never) 
         |
-        (T extends "Failure" | "Either"?IFailureResponse<E | "BadRequest" | "DBError">:never)
+        (T extends "Failure" | "Either"?IFailureResponse<E | "BadRequest" | "InternalError">:never)
 
 export namespace TableMap {
     interface IRectTableData {
@@ -127,5 +127,13 @@ export namespace GetTableAvailabilityEndpoint {
 }
 
 
+export namespace CreateReservationEndpoint {
+    interface IBody {
+        datetime?: string, 
+        tableID?: string, 
+        numOfClients?: string
+    }
 
+    type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<undefined, "Unauthorized" | "NoEntity", T>
+}
 

@@ -14,7 +14,7 @@ const deleteBooking = {
 
 const createBooking = {
     method: "POST",
-    url: "/api/createBooking",
+    url: "/api/booking",
     handler: BookingController.createBooking
 }
 

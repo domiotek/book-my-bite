@@ -3,6 +3,8 @@ import BookingRepository from "../repositories/BookingRepository.js";
 import SessionRepository from '../repositories/SessionRepository.js';
 import Booking from '../models/Booking.js';
 import { DateTime } from 'luxon';
+import { CreateReservationEndpoint } from '../../public/types/api.js';
+import TableRepository from '../repositories/TableRepository.js';
 
 export default class BookingController {
 
@@ -56,66 +58,84 @@ export default class BookingController {
 
         const sessionRepo = new SessionRepository();
         const bookingRepo = new BookingRepository();
+        const tableRepo = new TableRepository();
+
+        let result: CreateReservationEndpoint.IResponse = {
+            status: "Failure",
+            errCode: "BadRequest"
+        }
+
+        res.status(400);
         
         try {
-            const reqQuery = req.body as { datetime?: string, tableID?: string, clients?: string };
+            const reqQuery = req.body as CreateReservationEndpoint.IBody;
 
             //check if datetime, tableID and clients are provided and then convert respectively to DateTime, number and number
             const datetime = reqQuery.datetime ? DateTime.fromISO(reqQuery.datetime) : null;
             const tableID = reqQuery.tableID ? +reqQuery.tableID : null;
-            const clients = reqQuery.clients ? +reqQuery.clients : null;
+            const clientCount = reqQuery.numOfClients ? +reqQuery.numOfClients : null;
 
             //check if datetime, tableID and clients are not null
-            if (!datetime || !tableID || !clients) {
-                res.status(400);
-                return {
-                    error: "Bad request"
-                }
+            if (!datetime || !tableID || !clientCount) {
+                result.message = "Missing at least one of required parameters (datetime, tableID, numOfClients)";
+                return result;
+            }
+
+            if(!datetime.isValid) {
+                result.message = "Invalid datetime. ISO format required.";
+                return result;
+            }
+
+            if(DateTime.now() > datetime) {
+                result.message = "Invalid datetime. Can't reserve table in the past.";
+                return result;
+            }
+
+            const table = await tableRepo.getTableByID(tableID);
+
+            if(!table) {
+                result.errCode = "NoEntity";
+                result.message = "No such table.";
+                return result;
             }
             
-            const sessionID = req.cookies["session"];
-            if (!sessionID) {
+            const sessionID = req.cookies["session"] ?? "";
+            let session;
+
+            if ((session = await sessionRepo.getSessionByID(sessionID))==null) {
                 res.status(401);
-                return {
-                    error: "Unauthorized"
-                }
+
+                result.errCode = "Unauthorized";
+                result.message = "You need to be signed in.";
+
+                return result;
             }
-            const session = await sessionRepo.getSessionByID(sessionID);
-            const user_id = session?.getUser().getID();
-            if (!user_id) {
-                res.status(401);
-                return {
-                    error: "Unauthorized"
-                }
-            }
-            // console.log({
-            //     user_id: 1,
-            //     table_id: tableID,
-            //     datetime: datetime,
-            //     clients: clients
-            
-            // })
+            const userID = session.getUser().getID();
 
 
-            const result = await bookingRepo.createBooking(1, tableID, datetime, clients);
+            const repoResult = await bookingRepo.createBooking(userID, tableID, datetime, clientCount);
 
-            if (result) {
+            if (repoResult) {
                 res.status(200);
-                return {
-                    status: "Success"
+                
+                result = {
+                    status: "Success",
+                    data: undefined
                 }
-            } else {
-                res.status(500);
-                return {
-                    error: "No restaurant"
-                }
+
+                return result;
+            }else throw new Error("Unexpected DB error.");
+
+        } catch (e: any) {
+            res.status(500);
+
+            result = {
+                status: "Failure",
+                errCode: "InternalError",
+                message: e.message
             }
 
-        } catch (e) {
-            res.status(500);
-            return {
-                error: e
-            }
+            return result;
         }
     }
 }

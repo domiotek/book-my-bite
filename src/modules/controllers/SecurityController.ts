@@ -57,7 +57,7 @@ export default class SecurityController {
                     res.setCookie("session",sessionID,{path:"/",expires: expirationDate.toJSDate()});
                     result = {status: "Success", data: undefined};
                     return result;
-                }else result.errCode="DBError";
+                }else result.errCode="InternalError";
             }
         }
 

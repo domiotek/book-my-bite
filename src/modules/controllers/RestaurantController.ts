@@ -86,7 +86,7 @@ export default class RestaurantController {
 
         let result: GetTableMapEndpoint.IResponse = {
             status: "Failure",
-            errCode: "DBError"
+            errCode: "InternalError"
         }
 
         try {
@@ -135,7 +135,7 @@ export default class RestaurantController {
             res.status(500);
             return {
                 status: "Failure",
-                errCode: "DBError"
+                errCode: "InternalError"
             }
         }
     }
