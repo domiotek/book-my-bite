@@ -2,7 +2,8 @@ import {FastifyReply, FastifyRequest} from "fastify";
 import TableRepository from "../repositories/TableRepository.js";
 import BookingRepository from "../repositories/BookingRepository.js";
 import {DateTime} from "luxon";
-import {data} from "autoprefixer";
+import { GetTableAvailabilityEndpoint, TableMap } from "../../public/types/api.js";
+import Booking from "../models/Booking.js";
 
 export default class TableController {
 
@@ -10,46 +11,49 @@ export default class TableController {
         const tableRepository = new TableRepository();
         const bookingRepository = new BookingRepository();
 
-        try {
-            const reqQuery = req.query as {
-                restaurantId?: string,
-                dateTime?: string
-            };
+        let result: GetTableAvailabilityEndpoint.IResponse = {
+            status: "Failure",
+            errCode: "BadRequest"
+        }
 
-            if (!reqQuery.restaurantId) {
-                return {
-                    status: "Failure",
-                    error: "invalidRestaurantID"
-                }
+        res.status(400);
+
+        try {
+            const reqQuery = req.params as GetTableAvailabilityEndpoint.IParams;
+
+            if (!reqQuery.restaurantID) {
+                result.message = "Missing restaurantID";
+
+                return result;
             }
 
             if (!reqQuery.dateTime) {
-                return {
-                    status: "Failure",
-                    error: "invalidDateTime"
-                }
+                result.message = "Missing dateTime";
+
+                return result;
             }
 
             const datetime = DateTime.fromISO(reqQuery.dateTime);
-            const restaurantTables = await tableRepository.getRestaurantTables(+reqQuery.restaurantId);
 
-            if (!restaurantTables) {
-                return {
-                    status: "Failure",
-                    error: "noEntity"
-                }
+            if(!datetime.isValid) {
+                result.message = "Invalid dateTime. ISO format required.";
+
+                return result;
             }
 
-            const restaurantBookings = await bookingRepository.getRestaurantBookings(+reqQuery.restaurantId, datetime);
+            const restaurantTables = await tableRepository.getRestaurantTables(+reqQuery.restaurantID);
 
-            if (!restaurantBookings) {
-                return {
-                    status: "Failure",
-                    error: "noEntity"
-                }
+            if (restaurantTables==null) {
+                res.status(404);
+                result.errCode = "NoEntity";
+                result.message = "Couldn't find such restaurant.";
+
+                return result;
             }
 
-            const tableStatuses = restaurantTables.map(table => {
+            const restaurantBookings = await bookingRepository.getRestaurantBookings(+reqQuery.restaurantID, datetime) as Booking[];
+
+            const tableStatuses: TableMap.ITableAvailability[] = restaurantTables.map(table => {
                 for (const booking of restaurantBookings) {
                     if (booking.getTable().getID() === table.getID()) {
                         const start = booking.getDatetime().minus({hour: 3});
@@ -58,7 +62,7 @@ export default class TableController {
                         if (datetime > start && datetime < end) {
                             return {
                                 id: table.getID(),
-                                state: "Booked"
+                                isBooked: true
                             }
                         }
                     }
@@ -66,20 +70,27 @@ export default class TableController {
 
                 return {
                     id: table.getID(),
-                    state: "Free"
+                    isBooked: false
                 }
             });
 
-            return {
+            res.status(200);
+            result = {
                 status: "Success",
-                tableStatuses: tableStatuses
+                data: tableStatuses
             }
-        } catch (e) {
+
+            return result;
+        } catch (e: any) {
             res.status(500);
-            return {
+
+            result = {
                 status: "Failure",
-                error: e
+                errCode: "DBError",
+                message: e.message
             }
+
+            return result;
         }
     }
 }

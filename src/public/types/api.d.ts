@@ -81,7 +81,7 @@ export namespace TableMap {
 
     interface ITableAvailability {
         id: number
-        state: "Reserved" | "Free"
+        isBooked: boolean
     }
 
     interface ITableMapDefinition {
@@ -116,6 +116,15 @@ export namespace GetTableMapEndpoint {
     type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<TableMap.ITableMapDefinition,"NoEntity", T>
 }
 
+export namespace GetTableAvailabilityEndpoint {
+
+    interface IParams {
+        restaurantID?: string,
+        dateTime?: string
+    }
+
+    type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<TableMap.ITableAvailability[], "NoEntity", T>
+}
 
 
 
