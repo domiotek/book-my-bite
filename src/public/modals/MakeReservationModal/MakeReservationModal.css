@@ -159,6 +159,10 @@
     border-radius: inherit;
 }
 
+.LoadingCover h2 {
+    color: var(--orange-color);
+}
+
 @media screen and (min-width: 1025px) {
 
     .ModalWrapper {

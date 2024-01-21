@@ -13,7 +13,7 @@ interface ITableMapProps {
 
 interface ITableProps {
 	table: TableMap.ITableData
-	state: "Neutral" | "Disabled" | "Selected" | "Reserved";
+	state: "Neutral" | "Disabled" | "Selected" | "Booked";
 	clickHandler: ()=>void
 }
 
@@ -28,11 +28,11 @@ export default React.memo(function TableMap({tableMap, availabilityData, selecte
 			<div className={classes.Host} style={{height: tableMap.height, width: tableMap.width}}>
 			{
 				tableMap.tables.map(table=>{
-					let state: "Selected" | "Disabled" | "Reserved" | "Neutral";
+					let state: "Selected" | "Disabled" | "Booked" | "Neutral";
 
 					switch(true) {
 						case selectedTableID==table.id: state = "Selected"; break;
-						case availabilityData.filter(availData=>availData.id==table.id)[0]?.state=="Reserved": state = "Reserved"; break;
+						case availabilityData.filter(availData=>availData.id==table.id)[0]?.isBooked: state = "Booked"; break;
 						case numOfPeople>table.maxPeople||numOfPeople<table.minPeople: state = "Disabled"; break;
 						default: state="Neutral";
 					}
@@ -54,7 +54,7 @@ const Table = React.memo(function Table({table,state, clickHandler}: ITableProps
 
 	if(table.type=="Rect") {
 		return (
-			<div className={`${classes.Table} ${state=="Selected"?classes.Selected:""} ${state==="Disabled"?classes.Disabled:""} ${state==="Reserved"?classes.Reserved:""}`} 
+			<div className={`${classes.Table} ${state=="Selected"?classes.Selected:""} ${state==="Disabled"?classes.Disabled:""} ${state==="Booked"?classes.Reserved:""}`} 
 				onClick={state=="Neutral"?clickHandler:undefined} 
 				style={{
 					left:`${table.x}px`, 
@@ -68,7 +68,7 @@ const Table = React.memo(function Table({table,state, clickHandler}: ITableProps
 		)
 	}else {
 		return (
-			<div className={`${classes.Table} ${classes.Round} ${state=="Selected"?classes.Selected:""} ${state==="Disabled"?classes.Disabled:""} ${state==="Reserved"?classes.Reserved:""}`} 
+			<div className={`${classes.Table} ${classes.Round} ${state=="Selected"?classes.Selected:""} ${state==="Disabled"?classes.Disabled:""} ${state==="Booked"?classes.Reserved:""}`} 
 				onClick={state=="Neutral"?clickHandler:undefined} 
 				style={{
 					left:`${table.x}px`, 

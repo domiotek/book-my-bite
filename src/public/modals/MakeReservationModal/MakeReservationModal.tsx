@@ -9,7 +9,7 @@ import peopleImg from "../../assets/ui/people.svg";
 import closeImg from "../../assets/ui/close.svg";
 import { DateTime } from 'luxon';
 import TableMap from '../../components/TableMap/TableMap';
-import { GetTableMapEndpoint, TableMap as TableMapTypes } from '../../types/api';
+import { GetTableAvailabilityEndpoint, GetTableMapEndpoint, TableMap as TableMapTypes } from '../../types/api';
 
 interface IProps {
 	selectedRestaurantID: number
@@ -59,21 +59,40 @@ export default function MakeReservationModal({selectedRestaurantID}: IProps) {
 	useEffect(()=>{
 		setTableAvailability(null);
 		setSelectedTable(-1);
+		const targetDate = DateTime.fromISO(date);
 
-		if(DateTime.fromISO(date).isValid&&timeSlot!="") {
-			setTableAvailability([
-				{id: 1, state: "Free"},
-				{id: 2, state: "Free"},
-				{id: 3, state: "Reserved"},
-				{id: 4, state: "Free"},
-				{id: 5, state: "Free"},
-				{id: 6, state: "Free"},
-				{id: 7, state: "Free"},
-				{id: 8, state: "Free"},
-				{id: 9, state: "Free"},
-				{id: 10, state: "Free"}
-			]);
+		if(targetDate.isValid&&timeSlot!="") {
 			setParamsReady(true);
+			setFetchErr(false);
+			const aborter = new AbortController();
+
+			const [hour, minute] = timeSlot.split(":");
+
+			new Promise<void>(async res=>{
+
+				const targetDateTime = DateTime.fromObject({day: targetDate.day, month: targetDate.month, year: targetDate.year, hour: parseInt(hour), minute: parseInt(minute)});
+
+				if(!targetDateTime.isValid) {
+					setFetchErr(true);
+					res();
+					return;
+				}
+
+				const response = await fetch(`/api/tableAvailability/${selectedRestaurantID}/${targetDateTime.toISO()}`, {signal: aborter.signal});
+
+				if (response.ok) {
+					const data = await response.json() as GetTableAvailabilityEndpoint.IResponse<"Success">;
+
+					setTableAvailability(data.data);
+				}else {
+					const data = await response.json() as GetTableMapEndpoint.IResponse<"Failure">;
+					setFetchErr(true);
+					throw new Error(`Couldn't fetch restaurant table availability ErrCode: ${data.errCode}`);
+				}
+				res();
+			});
+
+			return ()=>aborter.abort();
 		}
 	},[date,timeSlot]);
 
@@ -126,7 +145,12 @@ export default function MakeReservationModal({selectedRestaurantID}: IProps) {
 								{
 									tableAvailability==null&&paramsReady?
 										<div className={classes.LoadingCover}>
-											<SyncLoader size="20px" color='var(--orange-color)' />
+											{
+												fetchErr?
+													<h2>Coś poszło nie tak</h2>
+												:
+													<SyncLoader size="20px" color='var(--orange-color)' />
+											}
 										</div>
 									:""
 								}
