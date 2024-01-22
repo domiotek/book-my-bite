@@ -66,12 +66,12 @@ export default function Login() {
 
     return (
         <div className={classes.login}>
-            <h1>Log into our service</h1>
+            <h1>Zaloguj się</h1>
             <form>
                 {error!=null&&<p className={classes.ErrorBox}>{error}</p>}
                 <input type="email" name="username" placeholder='Email' autoComplete='username' required value={email} onChange={e=>setEmail(e.target.value)}/>
-                <input type="password" name='password' placeholder='Password' autoComplete='current-password' required value={password} onChange={e=>setPassword(e.target.value)}/>
-                <button onClick={clickCallback} type='button'>Login</button>   
+                <input type="password" name='password' placeholder='Hasło' autoComplete='current-password' required value={password} onChange={e=>setPassword(e.target.value)}/>
+                <button onClick={clickCallback} type='button'>Zaloguj</button>   
             </form>
         </div>
     )

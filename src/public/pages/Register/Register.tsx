@@ -75,16 +75,16 @@ export default function Register() {
 
   return (
     <div className={classes.register}>
-            <h1>Create account</h1>
+            <h1>Utwórz konto</h1>
             <form>  
               {error!=null&&<p className={classes.ErrorBox}>{error}</p>}
-              <input type="text" placeholder='Name' required autoComplete='given-name' value={name} onChange={(e)=>setName(e.target.value)} />
-              <input type="text" placeholder='Surname' required autoComplete='family-name' value={surname} onChange={(e)=>setSurname(e.target.value)} />
-              <input type="tel" placeholder='Phone' required autoComplete='tel' value={phone} onChange={(e)=>setPhone(e.target.value)} />
+              <input type="text" placeholder='Imię' required autoComplete='given-name' value={name} onChange={(e)=>setName(e.target.value)} />
+              <input type="text" placeholder='Nazwisko' required autoComplete='family-name' value={surname} onChange={(e)=>setSurname(e.target.value)} />
+              <input type="tel" placeholder='Numer telefonu' required autoComplete='tel' value={phone} onChange={(e)=>setPhone(e.target.value)} />
               <input type="email" name="username" placeholder='Email' required autoComplete="email" value={email} onChange={(e)=>setEmail(e.target.value)} />
-              <input type="password" placeholder='Password' required autoComplete='new-password' value={password} onChange={(e)=>setPassword(e.target.value)} />
-              <input type="password" placeholder='Confirm password' required autoComplete='new-password' value={cpassword} onChange={(e)=>setCPassword(e.target.value)} />
-              <button type='button' onClick={clickCallback}>Register</button>
+              <input type="password" placeholder='Hasło' required autoComplete='new-password' value={password} onChange={(e)=>setPassword(e.target.value)} />
+              <input type="password" placeholder='Powtórz hasło' required autoComplete='new-password' value={cpassword} onChange={(e)=>setCPassword(e.target.value)} />
+              <button type='button' onClick={clickCallback}>Zarejestruj</button>
             </form>
         </div>
   )
