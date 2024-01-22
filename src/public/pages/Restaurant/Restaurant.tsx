@@ -16,15 +16,20 @@ export default function Restaurant() {
 	const [appContext, setAppContext] = useContext(AppContext);
 	const [restaurant, setRestaurant] = useState<Restaurant>();
 
+	const navigate = useNavigate();
+
 	const showFoodMenuAction = useCallback(() => {
 		appContext.setModalContent(<RestaurantMenuModal images={["/ilustrations/mock_menu.jpg", "/ilustrations/restro_bar.jpg"]} />);
 	}, []);
 
 	const showReservationModalAction = useCallback(() => {
-		appContext.setModalContent(<MakeReservationModal />);
+		if(appContext.isUserLoggedIn) {
+			appContext.setModalContent(<MakeReservationModal selectedRestaurantID={appContext.selectedRestaurantID as number}/>);
+		}else navigate("/Login");
+
 	}, []);
 
-	const navigate = useNavigate();
+
 
 	useEffect(() => {
 

@@ -77,27 +77,27 @@ export default class RestaurantRepository {
         return restaurants;
     }
 
-    public async createRestaurant(restaurant: Restaurant) {
-        try {
-            await global.app.orm.restaurant.createMany({
-                data: [
-                    {
-                        name: restaurant.getName(),
-                        description: restaurant.getDescription(),
-                        menu_id: restaurant.getMenu().getID(),
-                        foodtype_id: restaurant.getFoodtype().getID(),
-                        address_id: restaurant.getAddress().getID(),
-                        image: restaurant.getImage(),
-                        table_map: restaurant.getTablemap()
-                    }
-                ]
-            });
-        } catch (e) {
-            return false;
-        }
-
-        return true;
-    }
+    // public async createRestaurant(restaurant: Restaurant) {
+    //     try {
+    //         await global.app.orm.restaurant.createMany({
+    //             data: [
+    //                 {
+    //                     name: restaurant.getName(),
+    //                     description: restaurant.getDescription(),
+    //                     menu_id: restaurant.getMenu().getID(),
+    //                     foodtype_id: restaurant.getFoodtype().getID(),
+    //                     address_id: restaurant.getAddress().getID(),
+    //                     image: restaurant.getImage(),
+    //                     table_map: restaurant.getTablemap()
+    //                 }
+    //             ]
+    //         });
+    //     } catch (e) {
+    //         return false;
+    //     }
+    //
+    //     return true;
+    // }
 
     public async deleteRestaurant(restaurant: Restaurant) {
         const result = await global.app.orm.restaurant.deleteMany({
@@ -109,21 +109,21 @@ export default class RestaurantRepository {
         return result.count === 1;
     }
 
-    public async updateRestaurant(restaurant: Restaurant) {
-        const result = await global.app.orm.restaurant.updateMany({
-            where: {
-                restaurant_id: restaurant.getID()
-            },
-            data: {
-                name: restaurant.getName(),
-                description: restaurant.getDescription(),
-                menu_id: restaurant.getMenu().getID(),
-                foodtype_id: restaurant.getFoodtype().getID(),
-                address_id: restaurant.getAddress().getID(),
-                table_map: restaurant.getTablemap()
-            }
-        });
-
-        return result.count === 1;
-    }
+    // public async updateRestaurant(restaurant: Restaurant) {
+    //     const result = await global.app.orm.restaurant.updateMany({
+    //         where: {
+    //             restaurant_id: restaurant.getID()
+    //         },
+    //         data: {
+    //             name: restaurant.getName(),
+    //             description: restaurant.getDescription(),
+    //             menu_id: restaurant.getMenu().getID(),
+    //             foodtype_id: restaurant.getFoodtype().getID(),
+    //             address_id: restaurant.getAddress().getID(),
+    //             table_map: restaurant.getTablemap()
+    //         }
+    //     });
+    //
+    //     return result.count === 1;
+    // }
 }

@@ -9,6 +9,7 @@
 
 .Header {
     display: flex;
+    flex-direction: column;
     position: sticky;
     top: 0;
     background: inherit;
@@ -20,6 +21,41 @@
     margin: 0.5em;
     color: var(--orange-color);
     background: none!important;
+    align-self: flex-end;
+}
+
+.Header .ErrorMessage {
+    background: #ff6b6b;
+    margin: 0.5em auto 1.5em;
+    color: white;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    width: 90%;
+    text-align: center;
+}
+
+.DefaultView, .LoadingView, .ErrorView, .SuccessView  {
+    display: flex;
+    flex-direction: column;
+}
+
+.LoadingView, .ErrorView, .SuccessView {
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.ErrorView img, .SuccessView img {
+    width: 50%;
+}
+
+.ErrorView h3, .SuccessView h3 {
+    color: white;
+    margin-top: 1em;
+}
+
+.SuccessView button {
+    margin: 1.5em;
 }
 
 .ReservationPanel {
@@ -27,6 +63,8 @@
     display: flex;
     flex-direction: column;
     padding: 0 1em;
+    overflow-x: hidden;
+    justify-content: space-around;
 }
 
 .ReservationDetails {
@@ -92,12 +130,13 @@
     width: 100%;
     height: 270px;
     border-radius: 0.5em;
+    position: relative;
 }
 
 .TableMapContainer > h4 {
     color: white;
     text-align: center;
-    margin: 1em;
+    margin-top: 2em;
 }
 
 .SubmitButton {
@@ -107,16 +146,51 @@
     font-size: 1em;
     font-weight: bold;
     border: solid 1px var(--orange-color);
+    transition: background 0.4s, border 0.4s;
 }
 
 .SubmitButton:hover {
     background: transparent;
 }
 
+.SubmitButton:disabled {
+    background: lightgray;
+    border: solid 1px lightgray;
+}
+
+.LoadingCover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: #00000091;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: inherit;
+}
+
+.LoadingCover h2 {
+    color: var(--orange-color);
+}
+
 @media screen and (min-width: 1025px) {
 
+    .DefaultView {
+        overflow: hidden;
+    }
+
     .ModalWrapper {
-        min-width: 1000px;
+        min-width: 900px;
+    }
+
+    .ErrorView img, .SuccessView img {
+        width: 30%;
+    }
+
+    .ErrorMessage {
+        width: 70%!important;
     }
 
     .Header {
@@ -131,6 +205,7 @@
     .TableMapContainer {
         height: 100%;
         margin-left: 4em;
+        width: calc(75% - 4em);
     }
 
     .SubmitButton {
