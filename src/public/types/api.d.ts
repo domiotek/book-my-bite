@@ -144,3 +144,12 @@ export namespace CreateReservationEndpoint {
     type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<undefined, "Unauthorized" | "NoEntity", T>
 }
 
+export namespace GetHomePageFoodTypesEndpoint {
+    interface IFoodType {
+        id: number
+        name: string
+    }
+
+    type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<IFoodType[], "InternalError", T>
+}
+
