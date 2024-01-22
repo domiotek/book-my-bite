@@ -41,7 +41,7 @@ export default function Login() {
                 const responseBody = await response.json() as SignInEndpoint.IResponse<"Failure">;
 
                 switch(responseBody.errCode) {
-                    case "AlreadySignedIn":
+                    case "UserSignedIn":
                         const newCtx = Object.assign({},appContext);
                         newCtx.isUserLoggedIn = true;
                         setAppContext(newCtx);

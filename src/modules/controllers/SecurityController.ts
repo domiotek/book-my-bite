@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {hash, compare} from "bcrypt";
 import SessionRepository from "../repositories/SessionRepository.js";
-import { SignInEndpoint } from "../../public/types/api";
+import { SignInEndpoint, SignUpEndpoint } from "../../public/types/api";
 import UserRepository from "../repositories/UserRepository.js";
 import { randomBytes } from "crypto";
 import Session from "../models/Session.js";
@@ -30,7 +30,7 @@ export default class SecurityController {
 
         let result: SignInEndpoint.IResponse = {
             status: "Failure",
-            errCode: "AlreadySignedIn"
+            errCode: "UserSignedIn"
         }
 		res.status(400);
 
@@ -64,31 +64,59 @@ export default class SecurityController {
         return result;
     }
 
-    public static async register(req: FastifyRequest, res: FastifyReply) {
-        //create function to register user and log him in
-        const data = req.body as {name: string, surname: string, phone: string, email: string, password: string};
+    public static async signUpUser(req: FastifyRequest, res: FastifyReply) {
 
-        const user = await SecurityController.userRepository.getUserByEmail(data.email);
-
-        if(user) {
-            return {
-                status: "Failure",
-                errCode: "UserAlreadyExists"
-            }
+        let result: SignUpEndpoint.IResponse = {
+            status: "Failure",
+            errCode: "BadRequest"
         }
+
+        res.status(400);
+
+        const data = req.body as SignUpEndpoint.IBody;
+
+        if(!data.email || !data.password || !data.name || !data.surname || !data.phone) {
+            result.message = "Missing at least one of required parameters (email, password, name, surname, phone)";
+
+            return result;
+        }
+
+        if(!(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(data.email)) {
+            result.message = "Invalid email";
+
+            return result;
+        }
+
+        const sessionID = req.cookies["session"];
+
+        if(sessionID && await SecurityController.verifyUserSession(sessionID)) {
+            result.errCode = "UserSignedIn";
+            return result;
+        }
+
+        const userByEmail = await SecurityController.userRepository.getUserByEmail(data.email);
+        const userByPhone = await SecurityController.userRepository.getUserByPhone(data.phone);
+
+        if(userByEmail||userByPhone) {
+            result.errCode = "UserExists";
+            return result;
+        }
+
+
 
         const hashedPassword = await hash(data.password, 10);
 
-        const result = await SecurityController.userRepository.createUser(data.email, hashedPassword, data.name, data.surname, data.phone);
+        const repoResult = await SecurityController.userRepository.createUser(data.email, hashedPassword, data.name, data.surname, data.phone);
 
-        if(result) {
-            return await SecurityController.signInUser(req, res);
-        }
+        if(repoResult) {
+            res.status(201);
+            result = {
+                status: "Success",
+                data: undefined
+            }
+        }else result.errCode = "InternalError";
 
-        return {
-            status: "Failure",
-            errCode: "DBError"
-        }
+        return result;
     }
 
     public static async checkSignInStatus(req: FastifyRequest) {

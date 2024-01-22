@@ -1,3 +1,4 @@
+import Output from "../Output.js";
 import Role from "../models/Role.js";
 import User from "../models/User.js";
 
@@ -39,11 +40,28 @@ export default class UserRepository {
         return new User(userRecord.user_id, userRecord.email, userRecord.password_hash, userRecord.name, userRecord.surname, userRecord.phone, role);
     }
 
+    public async getUserByPhone(phone: string) {
+        const userRecord= await global.app.orm.user.findUnique({
+            include: {
+                role: true
+            },
+            where: {
+                phone
+            }
+        })
+
+        if (!userRecord) {
+            return null;
+        }
+
+        const role= new Role(userRecord.role.role_id, userRecord.role.name);
+        return new User(userRecord.user_id, userRecord.email, userRecord.password_hash, userRecord.name, userRecord.surname, userRecord.phone, role);
+    }
+
     public async createUser(email: string, password: string, name: string, surname: string, phone: string, role: number=1) {
         try {
-            await global.app.orm.user.createMany({
-                data: [
-                    {
+            await global.app.orm.user.create({
+                data:{
                         email: email,
                         password_hash: password,
                         name: name,
@@ -51,9 +69,9 @@ export default class UserRepository {
                         phone: phone,
                         role_id: role
                     }
-                ]
             });
-        } catch (e) {
+        } catch (e: any) {
+            Output.init().bg("red").fg("white").print(`[Repo][createUser] ${e.message}`);
             return false;
         }
 

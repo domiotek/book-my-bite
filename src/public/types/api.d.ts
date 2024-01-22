@@ -105,7 +105,19 @@ export namespace SignInEndpoint {
         password?: string
     }
 
-    type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<undefined, "AlreadySignedIn" | "InvalidCredentials",T>;
+    type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<undefined, "UserSignedIn" | "InvalidCredentials",T>;
+}
+
+export namespace SignUpEndpoint {
+    interface IBody {
+        email?: string
+        password?: string
+        name?: string
+        surname?: string
+        phone?: string
+    }
+
+    type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<undefined, "UserSignedIn" | "UserExists",T>;
 }
 
 export namespace CheckSignInEndpoint {
