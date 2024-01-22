@@ -19,4 +19,10 @@ const signOut = {
     handler: SecurityController.signOutUser
 }
 
-export default [signIn, checkSignInStatus, signOut];
+const register = {
+    method: "POST",
+    url: "/api/register",
+    handler: SecurityController.register
+}
+
+export default [signIn, checkSignInStatus, signOut, register];

@@ -39,17 +39,17 @@ export default class UserRepository {
         return new User(userRecord.user_id, userRecord.email, userRecord.password_hash, userRecord.name, userRecord.surname, userRecord.phone, role);
     }
 
-    public async createUser(user: User) {
+    public async createUser(email: string, password: string, name: string, surname: string, phone: string, role: number=1) {
         try {
             await global.app.orm.user.createMany({
                 data: [
                     {
-                        email: user.getEmail(),
-                        password_hash: user.getPassword(),
-                        name: user.getName(),
-                        surname: user.getSurname(),
-                        phone: user.getPhone(),
-                        role_id: user.getRole().getID()
+                        email: email,
+                        password_hash: password,
+                        name: name,
+                        surname: surname,
+                        phone: phone,
+                        role_id: role
                     }
                 ]
             });
