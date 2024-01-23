@@ -3,7 +3,7 @@ import FoodTypeRepository from '../repositories/FoodtypeRepository.js';
 import LocationRepository from '../repositories/LocationRepository.js';
 import RestaurantRepository from '../repositories/RestaurantRepository.js';
 import TableRepository from "../repositories/TableRepository.js";
-import { GetTableMapEndpoint, TableMap } from '../../public/types/api.js';
+import { GetTableMapEndpoint } from '../../public/types/api.js';
 import Table from '../models/Table.js';
 import Output from '../Output.js';
 
@@ -14,14 +14,16 @@ interface IRestaurantFilterOptions {
 }
 
 export default class RestaurantController {
+    public static readonly restaurantRepo = new RestaurantRepository();
+    public static readonly foodTypeRepo = new FoodTypeRepository();
+    public static readonly locationRepo = new LocationRepository();
+    public static readonly tableRepo = new TableRepository();
 
     public static async getLocationsAndFoodtypes(req: FastifyRequest, res: FastifyReply) {
-        const foodtypeRepo = new FoodTypeRepository();
-        const locationRepo = new LocationRepository();
 
         try {
-            const foodtypes = await foodtypeRepo.getFoodTypes();
-            const locations = await locationRepo.getCities();
+            const foodtypes = await RestaurantController.foodTypeRepo.getFoodTypes();
+            const locations = await RestaurantController.locationRepo.getCities();
 
             const foodtypesMapped = foodtypes.map((foodtype) => ({
                 id: foodtype.getID(),
@@ -81,8 +83,6 @@ export default class RestaurantController {
     }
 
     public static async getRestaurantTableMap(req: FastifyRequest, res: FastifyReply) {
-        const restaurantRepo = new RestaurantRepository();
-        const tableRepo = new TableRepository();
 
         let result: GetTableMapEndpoint.IResponse = {
             status: "Failure",
@@ -101,7 +101,7 @@ export default class RestaurantController {
                 return result;
             }
 
-            const restaurant = await restaurantRepo.getRestaurantByID(restaurantID);
+            const restaurant = await RestaurantController.restaurantRepo.getRestaurantByID(restaurantID);
 
             if(!restaurant) {
                 res.status(404);
@@ -114,7 +114,7 @@ export default class RestaurantController {
             const tableMap = restaurant.getTablemap();
 
             //getRestaurantTables returns null only if there is no restaurant with such id, we checked for that earlier.
-            const restaurantTables = await tableRepo.getRestaurantTables(restaurant.getID()) as Table[];
+            const restaurantTables = await RestaurantController.tableRepo.getRestaurantTables(restaurant.getID()) as Table[];
 
             const tableMapWithClients = tableMap.tables.map(table => {
                 const temp = restaurantTables.filter(tab => tab.getID() === table.id)[0];
@@ -141,12 +141,11 @@ export default class RestaurantController {
     }
 
     public static async getRestaurant(req: FastifyRequest, res: FastifyReply) {
-        const restaurantRepo = new RestaurantRepository();
 
         try {
             const reqQuery = req.query as { id: string };
 
-            const restaurant = await restaurantRepo.getRestaurantByID(+reqQuery.id);
+            const restaurant = await RestaurantController.restaurantRepo.getRestaurantByID(+reqQuery.id);
 
             const restaurantMapped = {
                 name: restaurant?.getName(),

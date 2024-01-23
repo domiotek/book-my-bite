@@ -9,17 +9,16 @@ import { DateTime } from "luxon";
 
 
 export default class SecurityController {
-    public static readonly sessionRepository = new SessionRepository();
-    public static readonly userRepository = new UserRepository();
+    public static readonly sessionRepo = new SessionRepository();
+    public static readonly userRepo = new UserRepository();
 
     public static async verifyUserSession(sessionID: string) {
-        const sessionRepo = SecurityController.sessionRepository;
 
-        const session = await sessionRepo.getSessionByID(sessionID);
+        const session = await SecurityController.sessionRepo.getSessionByID(sessionID);
 
         if(session) {
             if(session.isValid()) return true;
-            else sessionRepo.deleteSession(session.getID());
+            else SecurityController.sessionRepo.deleteSession(session.getID());
         }
 
         return false;
@@ -41,7 +40,7 @@ export default class SecurityController {
         result.errCode = "InvalidCredentials";
 
         const data = req.body as SignInEndpoint.IRequest;
-        const user = await SecurityController.userRepository.getUserByEmail(data.email ?? "");
+        const user = await SecurityController.userRepo.getUserByEmail(data.email ?? "");
 
         if(user) {
             const passwordCheck = await compare(data.password ?? "", user.getPassword());
@@ -50,7 +49,7 @@ export default class SecurityController {
                 const expirationDate = DateTime.now().plus({day: 7});
                 const session = new Session(sessionID, user, expirationDate);
 
-                const dbResult = await SecurityController.sessionRepository.createSession(session);
+                const dbResult = await SecurityController.sessionRepo.createSession(session);
 
                 if(dbResult) {
 					res.status(200);
@@ -94,8 +93,8 @@ export default class SecurityController {
             return result;
         }
 
-        const userByEmail = await SecurityController.userRepository.getUserByEmail(data.email);
-        const userByPhone = await SecurityController.userRepository.getUserByPhone(data.phone);
+        const userByEmail = await SecurityController.userRepo.getUserByEmail(data.email);
+        const userByPhone = await SecurityController.userRepo.getUserByPhone(data.phone);
 
         if(userByEmail||userByPhone) {
             result.errCode = "UserExists";
@@ -106,7 +105,7 @@ export default class SecurityController {
 
         const hashedPassword = await hash(data.password, 10);
 
-        const repoResult = await SecurityController.userRepository.createUser(data.email, hashedPassword, data.name, data.surname, data.phone);
+        const repoResult = await SecurityController.userRepo.createUser(data.email, hashedPassword, data.name, data.surname, data.phone);
 
         if(repoResult) {
             res.status(201);
@@ -130,7 +129,7 @@ export default class SecurityController {
         const sessionID = req.cookies["session"];
 
         if(sessionID) {
-            SecurityController.sessionRepository.deleteSession(sessionID ?? "");
+            SecurityController.sessionRepo.deleteSession(sessionID ?? "");
         }
 
         res.redirect("/Home");

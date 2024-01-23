@@ -1,24 +1,24 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import BookingRepository from "../repositories/BookingRepository.js";
 import SessionRepository from '../repositories/SessionRepository.js';
-import Booking from '../models/Booking.js';
 import { DateTime } from 'luxon';
 import { CreateReservationEndpoint } from '../../public/types/api.js';
 import TableRepository from '../repositories/TableRepository.js';
 
 export default class BookingController {
+    public static readonly bookingRepo = new BookingRepository();
+    public static readonly sessionRepo = new SessionRepository();
+    public static readonly tableRepo = new TableRepository();
 
     public static async getUserBookings(req: FastifyRequest, res: FastifyReply) {
-        const bookingRepo = new BookingRepository();
-        const sessionRepo = new SessionRepository();
 
         try {
             const sessionId = req.cookies['session'];
             let session;
 
-            if (sessionId && (session = await sessionRepo.getSessionByID(sessionId))) {
+            if (sessionId && (session = await BookingController.sessionRepo.getSessionByID(sessionId))) {
 
-                const bookings = await  bookingRepo.getUserBookings(session.getUser().getID());
+                const bookings = await BookingController.bookingRepo.getUserBookings(session.getUser().getID());
                 const bookingsMapped = bookings?.map((booking) => ({
                     id: booking.getID(),
                     clients: booking.getClients(),
@@ -47,12 +47,11 @@ export default class BookingController {
     }
 
     public static async deleteBooking(req: FastifyRequest, res: FastifyReply) {
-        const bookingRepo = new BookingRepository();
 
         try {
             const reqQuery = req.params as { id: string };
 
-            const deleted = await bookingRepo.deleteBooking(+reqQuery.id);
+            const deleted = await BookingController.bookingRepo.deleteBooking(+reqQuery.id);
 
             return {
                 deleted: deleted
@@ -66,10 +65,6 @@ export default class BookingController {
     }
 
     public static async createBooking(req: FastifyRequest, res: FastifyReply) {
-
-        const sessionRepo = new SessionRepository();
-        const bookingRepo = new BookingRepository();
-        const tableRepo = new TableRepository();
 
         let result: CreateReservationEndpoint.IResponse = {
             status: "Failure",
@@ -102,7 +97,7 @@ export default class BookingController {
                 return result;
             }
 
-            const table = await tableRepo.getTableByID(tableID);
+            const table = await BookingController.tableRepo.getTableByID(tableID);
 
             if(!table) {
                 result.errCode = "NoEntity";
@@ -113,7 +108,7 @@ export default class BookingController {
             const sessionID = req.cookies["session"] ?? "";
             let session;
 
-            if ((session = await sessionRepo.getSessionByID(sessionID))==null) {
+            if ((session = await BookingController.sessionRepo.getSessionByID(sessionID))==null) {
                 res.status(401);
 
                 result.errCode = "Unauthorized";
@@ -124,7 +119,7 @@ export default class BookingController {
             const userID = session.getUser().getID();
 
 
-            const repoResult = await bookingRepo.createBooking(userID, tableID, datetime, clientCount);
+            const repoResult = await BookingController.bookingRepo.createBooking(userID, tableID, datetime, clientCount);
 
             if (repoResult) {
                 res.status(200);

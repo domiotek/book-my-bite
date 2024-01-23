@@ -4,9 +4,9 @@ import FoodTypeRepository from "../repositories/FoodtypeRepository.js";
 import {FastifyReply, FastifyRequest} from "fastify";
 
 export default class FoodTypeController {
+    public static readonly foodTypeRepo = new FoodTypeRepository();
 
     public static async getFoodTypeIDs(req: FastifyRequest, res: FastifyReply) {
-        const foodTypeRepository = new FoodTypeRepository();
 
         let result: GetHomePageFoodTypesEndpoint.IResponse = {
             status: "Failure",
@@ -14,7 +14,7 @@ export default class FoodTypeController {
         }
 
         try {
-            const foodTypesForHomePage = await foodTypeRepository.getFoodTypesForHomePage();
+            const foodTypesForHomePage = await FoodTypeController.foodTypeRepo.getFoodTypesForHomePage();
 
             const foodTypesMapped = foodTypesForHomePage.map(ft => {
                 return {

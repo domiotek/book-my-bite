@@ -6,10 +6,10 @@ import { GetTableAvailabilityEndpoint, TableMap } from "../../public/types/api.j
 import Booking from "../models/Booking.js";
 
 export default class TableController {
+    public static readonly tableRepo = new TableRepository();
+    public static readonly bookingRepo = new BookingRepository();
 
     public static async getTablesAvailability(req: FastifyRequest, res: FastifyReply) {
-        const tableRepository = new TableRepository();
-        const bookingRepository = new BookingRepository();
 
         let result: GetTableAvailabilityEndpoint.IResponse = {
             status: "Failure",
@@ -41,7 +41,7 @@ export default class TableController {
                 return result;
             }
 
-            const restaurantTables = await tableRepository.getRestaurantTables(+reqQuery.restaurantID);
+            const restaurantTables = await TableController.tableRepo.getRestaurantTables(+reqQuery.restaurantID);
 
             if (restaurantTables==null) {
                 res.status(404);
@@ -51,7 +51,7 @@ export default class TableController {
                 return result;
             }
 
-            const restaurantBookings = await bookingRepository.getRestaurantBookings(+reqQuery.restaurantID, datetime) as Booking[];
+            const restaurantBookings = await TableController.bookingRepo.getRestaurantBookings(+reqQuery.restaurantID, datetime) as Booking[];
 
             const tableStatuses: TableMap.ITableAvailability[] = restaurantTables.map(table => {
                 for (const booking of restaurantBookings) {
