@@ -8,7 +8,7 @@ const getUserBookings = {
 
 const deleteBooking = {
     method: "DELETE",
-    url: "/api/deleteBooking/:id",
+    url: "/api/booking/:id",
     handler: BookingController.deleteBooking
 }
 

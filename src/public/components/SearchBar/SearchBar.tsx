@@ -44,7 +44,7 @@ export default function SearchBar() {
 
         new Promise<void>(async res=>{
             try {
-                const response = await fetch('/api/locationsAndFoodtypes', {signal: aborter.signal});
+                const response = await fetch('/api/searchParams', {signal: aborter.signal});
 
                 if (!response.ok) {
                     console.log('Cannot reach locations and foodtypes response');

@@ -1,9 +1,9 @@
 import RestaurantController from "../controllers/RestaurantController.js";
 
-const getLocationsAndFoodtypes = {
+const getSearchParams = {
     method: "GET",
-    url: "/api/locationsAndFoodtypes",
-    handler: RestaurantController.getLocationsAndFoodtypes
+    url: "/api/searchParams",
+    handler: RestaurantController.getRestaurantSearchParameters
 }
 
 const getRestaurants = {
@@ -14,14 +14,14 @@ const getRestaurants = {
 
 const getRestaurant = {
     method: "GET",
-    url: "/api/restaurant",
+    url: "/api/restaurant/:id",
     handler: RestaurantController.getRestaurant
 }
 
 const getRestaurantTableMap = {
     method: "GET",
-    url: "/api/restaurantTableMap",
+    url: "/api/restaurant/:id/tableMap",
     handler: RestaurantController.getRestaurantTableMap
 }
 
-export default [getLocationsAndFoodtypes, getRestaurants, getRestaurant, getRestaurantTableMap];
+export default [getSearchParams, getRestaurants, getRestaurant, getRestaurantTableMap];

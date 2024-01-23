@@ -38,7 +38,7 @@ export default function MakeReservationModal({selectedRestaurantID}: IProps) {
 		const aborter = new AbortController();
 
         new Promise<void>(async res=>{
-			const response = await fetch(`/api/restaurantTableMap?id=${selectedRestaurantID}`, {signal: aborter.signal});
+			const response = await fetch(`/api/restaurant/${selectedRestaurantID}/tableMap`, {signal: aborter.signal});
 
 			if (response.ok) {
 				const data = await response.json() as GetTableMapEndpoint.IResponse<"Success">;

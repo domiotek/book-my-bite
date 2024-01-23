@@ -40,7 +40,7 @@ export default function Reservations() {
     }
 
     try {
-      const response = await fetch(`/api/deleteBooking/${id}`, {method: 'DELETE'});
+      const response = await fetch(`/api/booking/${id}`, {method: 'DELETE'});
 
       if (!response.ok) {
         console.log('Cannot reach canceling reservation response');

@@ -19,7 +19,7 @@ export default class RestaurantController {
     public static readonly locationRepo = new LocationRepository();
     public static readonly tableRepo = new TableRepository();
 
-    public static async getLocationsAndFoodtypes(req: FastifyRequest, res: FastifyReply) {
+    public static async getRestaurantSearchParameters(req: FastifyRequest, res: FastifyReply) {
 
         try {
             const foodtypes = await RestaurantController.foodTypeRepo.getFoodTypes();
@@ -90,7 +90,7 @@ export default class RestaurantController {
         }
 
         try {
-            const reqQuery = req.query as GetTableMapEndpoint.IRequest;
+            const reqQuery = req.params as GetTableMapEndpoint.IParams;
             let restaurantID;
 
             if(!reqQuery.id||(isNaN(restaurantID=parseInt(reqQuery.id)))) {
@@ -143,7 +143,7 @@ export default class RestaurantController {
     public static async getRestaurant(req: FastifyRequest, res: FastifyReply) {
 
         try {
-            const reqQuery = req.query as { id: string };
+            const reqQuery = req.params as { id: string };
 
             const restaurant = await RestaurantController.restaurantRepo.getRestaurantByID(+reqQuery.id);
 

@@ -128,7 +128,7 @@ export namespace CheckSignInEndpoint {
 }
 
 export namespace GetTableMapEndpoint {
-    interface IRequest {
+    interface IParams {
         id?: string
     }
 

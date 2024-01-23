@@ -41,7 +41,7 @@ export default function Restaurant() {
 
 		new Promise<void>(async res => {
 			try {
-				const response = await fetch(`/api/restaurant?id=${appContext.selectedRestaurantID}`, { signal: aborter.signal });
+				const response = await fetch(`/api/restaurant/${appContext.selectedRestaurantID}`, { signal: aborter.signal });
 
 				if (!response.ok) {
 					console.log('Cannot reach restaurant response');
