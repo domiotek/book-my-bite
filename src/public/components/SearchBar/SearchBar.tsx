@@ -6,11 +6,11 @@ import searchImg from "../../assets/ui/search.svg";
 import classes from './SearchBar.css';
 import { AppContext } from "../../App";
 import { useNavigate } from "react-router-dom";
-import { Foodtype, Location } from "../../types/api";
+import { GetRestaurantSearchParamsEndpoint } from "../../types/api";
 
 export default function SearchBar() {
-    const [locations, setLocations] = useState<Location[]>([]);
-    const [foodtypes, setFoodtypes] = useState<Foodtype[]>([]);
+    const [locations, setLocations] = useState<GetRestaurantSearchParamsEndpoint.ILocation[]>([]);
+    const [foodtypes, setFoodtypes] = useState<GetRestaurantSearchParamsEndpoint.IFoodtype[]>([]);
 
     const [location, setLocation] = useState<number>(0);
     const [foodType, setFoodType] = useState<number>(0);
@@ -47,15 +47,17 @@ export default function SearchBar() {
                 const response = await fetch('/api/searchParams', {signal: aborter.signal});
 
                 if (!response.ok) {
-                    console.log('Cannot reach locations and foodtypes response');
+                    const result = await response.json() as GetRestaurantSearchParamsEndpoint.IResponse<"Failure">;
+
+                    console.error(`Couldn't get search parameters. ErrCode: ${result.errCode}`);
                     return;
                 }
 
-                const data = await response.json();
-                setLocations(data.locations);
-                setFoodtypes(data.foodtypes);
+                const data = await response.json() as GetRestaurantSearchParamsEndpoint.IResponse<"Success">;
+                setLocations(data.data.locations);
+                setFoodtypes(data.data.foodtypes);
             } catch (e) {
-                console.log('Error in fetch locations and foodtypes operation: ', e);
+                console.log('Error in fetch searchParams operation: ', e);
             }
 
             res();

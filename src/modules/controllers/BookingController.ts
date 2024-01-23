@@ -2,8 +2,10 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import BookingRepository from "../repositories/BookingRepository.js";
 import SessionRepository from '../repositories/SessionRepository.js';
 import { DateTime } from 'luxon';
-import { CreateReservationEndpoint } from '../../public/types/api.js';
+import { CreateReservationEndpoint, DeleteBookingEndpoint, GetUserBookingsEndpoint } from '../../public/types/api.js';
 import TableRepository from '../repositories/TableRepository.js';
+import Output from '../Output.js';
+import Booking from '../models/Booking.js';
 
 export default class BookingController {
     public static readonly bookingRepo = new BookingRepository();
@@ -12,55 +14,107 @@ export default class BookingController {
 
     public static async getUserBookings(req: FastifyRequest, res: FastifyReply) {
 
+        let result: GetUserBookingsEndpoint.IResponse = {
+            status: "Failure",
+            errCode: "InternalError"
+        }
+
         try {
             const sessionId = req.cookies['session'];
             let session;
 
             if (sessionId && (session = await BookingController.sessionRepo.getSessionByID(sessionId))) {
 
-                const bookings = await BookingController.bookingRepo.getUserBookings(session.getUser().getID());
-                const bookingsMapped = bookings?.map((booking) => ({
+                const bookings = await BookingController.bookingRepo.getUserBookings(session.getUser().getID()) as Booking[];
+
+                const bookingsMapped = bookings.map((booking) => ({
                     id: booking.getID(),
                     clients: booking.getClients(),
                     restaurantName: booking.getTable().getRestaurant().getName(),
                     location: booking.getTable().getRestaurant().getAddress().getCity().getName() + " " + booking.getTable().getRestaurant().getAddress().getStreetName() + " " + booking.getTable().getRestaurant().getAddress().getBuildingNumber(),
                     datetime: booking.getDatetime().toFormat("dd-MM-yyyy HH:mm")
                 }));
+
+                res.status(200);
+
+                result = {
+                    status: "Success",
+                    data: bookingsMapped
+                }
     
-                return {
-                    bookings: bookingsMapped
-                };
-                
+                return result;
             }
 
             res.status(401);
-            return {
-                error: 'Unauthorized user'
-            }
-
-        } catch (e) {
+            result.errCode = "Unauthorized";
+            result.message = "You need to be signed in to access this data.";
+        } catch (e: any) {
             res.status(500);
-            return {
-                error: e
-            }
+            Output.init().bg("red").fg("white").print(`[Endpoint][getUserBookings] Err: ${e.message}`);
         }
+
+        return result;
     }
 
     public static async deleteBooking(req: FastifyRequest, res: FastifyReply) {
 
+        let result: DeleteBookingEndpoint.IResponse = {
+            status: "Failure",
+            errCode: "BadRequest"
+        }
+
         try {
-            const reqQuery = req.params as { id: string };
+            const reqQuery = req.params as DeleteBookingEndpoint.IParams;
 
-            const deleted = await BookingController.bookingRepo.deleteBooking(+reqQuery.id);
+            const booking = await BookingController.bookingRepo.getBooking(parseInt(reqQuery.id ?? ""));
 
-            return {
-                deleted: deleted
-            };
-        } catch (e) {
-            res.status(500);
-            return {
-                error: e
+            if(!booking) {
+                res.status(404);
+                result.errCode = "NoEntity";
+                result.message = "No such booking.";
+
+                return result;
             }
+
+            const sessionId = req.cookies['session'];
+            let session;
+
+            res.status(401);
+            result.errCode = "Unauthorized";
+
+            if (!sessionId || (session = await BookingController.sessionRepo.getSessionByID(sessionId))==null) {
+                result.message = "You need to be signed in.";
+
+                return result;
+            }
+
+            if(session.getUser().getID()!=booking.getUser().getID()) {
+                result.message = "You can't delete booking that doesn't belong to you.";
+
+                return result;
+            }
+
+            const deleted = await BookingController.bookingRepo.deleteBooking(booking.getID());
+
+            if(deleted) {
+                res.status(200);
+                result = {
+                    status: "Success",
+                    data: undefined
+                }
+
+                return result;
+
+            }else throw new Error("Unknown DB error.");
+        } catch (e: any) {
+            res.status(500);
+            Output.init().bg("red").fg("white").print(`[Endpoint][deleteBooking] Err: ${e.message}`)
+            result = {
+                status: "Failure",
+                errCode: "InternalError"
+            }
+
+            return result;
         }
     }
 
@@ -135,10 +189,11 @@ export default class BookingController {
         } catch (e: any) {
             res.status(500);
 
+            Output.init().bg("red").fg("white").print(`[Endpoint][createBooking] Err: ${e.message}`);
+
             result = {
                 status: "Failure",
-                errCode: "InternalError",
-                message: e.message
+                errCode: "InternalError"
             }
 
             return result;

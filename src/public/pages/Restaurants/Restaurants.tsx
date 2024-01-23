@@ -7,12 +7,12 @@ import locationImg from "../../assets/ui/location-orange.svg";
 import foodtypeImg from "../../assets/ui/foodtype-orange.svg";
 import { AppContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
-import { Restaurants } from '../../types/api';
+import { GetRestaurantsEndpoint } from '../../types/api';
 import NoData from '../../components/NoData/NoData';
 
 export default function Restaurants() {
 	const [appContext, setAppContext] = useContext(AppContext);
-	const [restaurants, setRestaurants] = useState<Restaurants[]>([]);
+	const [restaurants, setRestaurants] = useState<GetRestaurantsEndpoint.IRestaurantData[]>([]);
 
 	const navigate = useNavigate();
 
@@ -24,12 +24,14 @@ export default function Restaurants() {
 				const response = await fetch(`/api/restaurants?city=${appContext.filters.city}&name=${appContext.filters.name}&foodType=${appContext.filters.foodType}`, { signal: aborter.signal });
 
 				if (!response.ok) {
-					console.log('Cannot reach restaurants response');
+					const result = await response.json() as GetRestaurantsEndpoint.IResponse<"Failure">;
+
+					console.error(`Couldn't get restaurants. ErrCode: ${result.errCode}`);
 					return;
 				}
 
-				const data = await response.json();
-				setRestaurants(data.restaurants);
+				const data = await response.json() as GetRestaurantsEndpoint.IResponse<"Success">;
+				setRestaurants(data.data);
 			} catch (e) {
 				console.log('Error in fetch restaurants operation: ', e)
 			}

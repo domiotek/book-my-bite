@@ -3,11 +3,11 @@ import locationImg from "../../assets/ui/location-orange.svg";
 import deleteImg from '../../assets/ui/delete.svg';
 
 import classes from './Reservations.css';
-import { Reservation } from '../../types/api';
+import { DeleteBookingEndpoint, GetUserBookingsEndpoint} from '../../types/api';
 import NoData from '../../components/NoData/NoData';
 
 export default function Reservations() {
-  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [reservations, setReservations] = useState<GetUserBookingsEndpoint.IBookingData[]>([]);
 
   useEffect(() => {
     const aborter = new AbortController();
@@ -17,12 +17,14 @@ export default function Reservations() {
             const response = await fetch(`/api/userBookings`, {signal: aborter.signal});
 
             if (!response.ok) {
-                console.log('Cannot reach reservations response');
+				const result = await response.json() as DeleteBookingEndpoint.IResponse<"Failure">;
+
+				console.error(`Couldn't get user reservations. ErrCode: ${result.errCode}`);
                 return;
             }
 
-            const data = await response.json();
-            setReservations(data.bookings);
+            const data = await response.json() as GetUserBookingsEndpoint.IResponse<"Success">;
+            setReservations(data.data);
         } catch (e) {
             console.log('Error in fetch reservations operation: ', e);
         }
@@ -43,14 +45,11 @@ export default function Reservations() {
       const response = await fetch(`/api/booking/${id}`, {method: 'DELETE'});
 
       if (!response.ok) {
-        console.log('Cannot reach canceling reservation response');
-        return;
-      }
-
-      const data = await response.json();
-
-      if (!data.deleted) {
         alert('Przepraszamy, nie udało się anulować rezerwacji, spróbuj ponownie później');
+
+        const result = await response.json() as DeleteBookingEndpoint.IResponse<"Failure">;
+
+        console.error(`Couldn't cancel reservation. ErrCode: ${result.errCode}`);
         return;
       }
 

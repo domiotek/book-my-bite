@@ -1,37 +1,3 @@
-interface Location {
-    id: number
-    name: string
-}
-
-interface Foodtype {
-    id: number
-    name: string
-}
-
-interface Restaurants {
-    id: number,
-    foodtype: string,
-    imgUrl: string,
-    location: string,
-    name: string
-}
-
-interface Restaurant {
-    name: string,
-    description: string,
-    location: string,
-    foodtype: string,
-    menu: string,
-    tablesMap: string,
-    imgUrl: string
-}
-
-interface Reservation {
-    id: number,
-    restaurantName: string,
-    location: string,
-    datetime: string,
-}
 
 type ISuccessResponse<T> = {
     status: "Success"
@@ -165,3 +131,74 @@ export namespace GetHomePageFoodTypesEndpoint {
     type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<IFoodType[], "InternalError", T>
 }
 
+export namespace GetUserBookingsEndpoint {
+    interface IBookingData {
+        id: number,
+        clients: number,
+        restaurantName: string,
+        location: string,
+        datetime: string
+    }
+
+    type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<IBookingData[], "Unauthorized", T>
+}
+
+export namespace DeleteBookingEndpoint {
+
+    interface IParams {
+        id: string
+    }
+
+    type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<undefined, "Unauthorized" | "NoEntity", T>
+}
+
+export namespace GetRestaurantSearchParamsEndpoint {
+
+    interface ILocation {
+        id: number
+        name: string
+    }
+    
+    interface IFoodtype {
+        id: number
+        name: string
+    }
+
+    interface IResponseData {
+        foodtypes: IFoodtype[]
+        locations: ILocation[]
+    }
+
+    type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<IResponseData, "InternalError", T>
+}
+
+export namespace GetRestaurantsEndpoint {
+
+    interface IRestaurantData {
+        id: number,
+        foodtype: string,
+        imgUrl: string,
+        location: string,
+        name: string
+    }
+
+    type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<IRestaurantData[], "InternalError", T>
+}
+
+export namespace GetRestaurantEndpoint {
+
+    interface IParams {
+        id: string
+    }
+
+    interface IDetailedRestaurantData {
+        name: string,
+        description: string,
+        location: string,
+        foodtype: string,
+        menu: string,
+        imgUrl: string
+    }
+
+    type IResponse<T extends TResponseTypes="Either"> = IAPIResponse<IDetailedRestaurantData, "NoEntity", T>
+}

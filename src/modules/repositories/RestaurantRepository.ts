@@ -70,7 +70,7 @@ export default class RestaurantRepository {
         const restaurants = [];
 
         for (const record of restaurantRecords) {
-            const restaurant = await this.getRestaurantByID(record.restaurant_id);
+            const restaurant = await this.getRestaurantByID(record.restaurant_id) as Restaurant;
             restaurants.push(restaurant);
         }
 

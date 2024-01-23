@@ -4,6 +4,7 @@ import BookingRepository from "../repositories/BookingRepository.js";
 import {DateTime} from "luxon";
 import { GetTableAvailabilityEndpoint, TableMap } from "../../public/types/api.js";
 import Booking from "../models/Booking.js";
+import Output from "../Output.js";
 
 export default class TableController {
     public static readonly tableRepo = new TableRepository();
@@ -83,11 +84,11 @@ export default class TableController {
             return result;
         } catch (e: any) {
             res.status(500);
+            Output.init().bg("red").fg("white").print(`[Endpoint][getTablesAvailability] Err: ${e.message}`)
 
             result = {
                 status: "Failure",
-                errCode: "InternalError",
-                message: e.message
+                errCode: "InternalError"
             }
 
             return result;

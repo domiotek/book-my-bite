@@ -3,7 +3,7 @@ import FoodTypeRepository from '../repositories/FoodtypeRepository.js';
 import LocationRepository from '../repositories/LocationRepository.js';
 import RestaurantRepository from '../repositories/RestaurantRepository.js';
 import TableRepository from "../repositories/TableRepository.js";
-import { GetTableMapEndpoint } from '../../public/types/api.js';
+import { GetRestaurantsEndpoint, GetRestaurantSearchParamsEndpoint, GetTableMapEndpoint, GetRestaurantEndpoint } from '../../public/types/api.js';
 import Table from '../models/Table.js';
 import Output from '../Output.js';
 
@@ -21,6 +21,11 @@ export default class RestaurantController {
 
     public static async getRestaurantSearchParameters(req: FastifyRequest, res: FastifyReply) {
 
+        let result: GetRestaurantSearchParamsEndpoint.IResponse = {
+            status: "Failure",
+            errCode: "InternalError"
+        }
+
         try {
             const foodtypes = await RestaurantController.foodTypeRepo.getFoodTypes();
             const locations = await RestaurantController.locationRepo.getCities();
@@ -35,21 +40,30 @@ export default class RestaurantController {
                 name: location.getName()
             }));
 
-            return {
-                foodtypes: foodtypesMapped,
-                locations: locationsMapped
+            result = {
+                status: "Success",
+                data: {
+                    foodtypes: foodtypesMapped,
+                    locations: locationsMapped
+                }
             }
-        } catch (e) {
+
+            return result;
+        } catch (e: any) {
             res.status(500);
-            return {
-                error: 'Internal Server Error'
-            }
+            Output.init().bg("red").fg("white").print(`[Endpoint][getRestaurantSearchParameters] Err: ${e.message}`);
+
+            return result;
         }
 
     }
 
     public static async getRestaurants(req: FastifyRequest, res: FastifyReply) {
-        const restaurantRepo = new RestaurantRepository();
+
+        let result: GetRestaurantsEndpoint.IResponse = {
+            status: "Failure",
+            errCode: "InternalError"
+        }
 
         try {
             const reqQuery = req.query as IRestaurantFilterOptions;
@@ -60,9 +74,9 @@ export default class RestaurantController {
                 foodType: (+reqQuery.foodType) ? +reqQuery.foodType : undefined
             };
 
-            const restaurants = await restaurantRepo.getRestaurants(filters);
+            const restaurants = await RestaurantController.restaurantRepo.getRestaurants(filters);
 
-            const restaurantsMapped = restaurants?.map((restaurant) => ({
+            const restaurantsMapped = restaurants.map((restaurant) => ({
                 id: restaurant?.getID(),
                 name: restaurant?.getName(),
                 location: restaurant?.getAddress().getCity().getName() + ', ' + restaurant?.getAddress().getStreetName() + ' ' + restaurant?.getAddress().getBuildingNumber(),
@@ -70,15 +84,17 @@ export default class RestaurantController {
                 imgUrl: restaurant?.getImage()
             }));
 
-            return {
-                restaurants: restaurantsMapped
+            result = {
+                status: "Success",
+                data: restaurantsMapped
             }
 
-        } catch (e) {
+            return result;
+        } catch (e: any) {
             res.status(500);
-            return {
-                error: e
-            }
+            Output.init().bg("red").fg("white").print(`[Endpoint][getRestaurants] Err: ${e.message}`);
+
+            return result;
         }
     }
 
@@ -131,41 +147,58 @@ export default class RestaurantController {
                 data: Object.assign({}, tableMap, {tables: tableMapWithClients})
             }
         } catch (e: any) {
-            Output.init().bg("red").fg("white").print(`[Endpoint Error][${this.name}] ${e.message}`);
+            Output.init().bg("red").fg("white").print(`[Endpoint Error][getRestaurantTableMap] Err: ${e.message}`);
             res.status(500);
-            return {
-                status: "Failure",
-                errCode: "InternalError"
-            }
+
+            result.errCode = "InternalError";
+            return result;
         }
     }
 
     public static async getRestaurant(req: FastifyRequest, res: FastifyReply) {
 
+        let result: GetRestaurantEndpoint.IResponse = {
+            status: "Failure",
+            errCode: 'NoEntity'
+        }
+
         try {
-            const reqQuery = req.params as { id: string };
+            const reqQuery = req.params as GetRestaurantEndpoint.IParams;
 
             const restaurant = await RestaurantController.restaurantRepo.getRestaurantByID(+reqQuery.id);
 
+            if(!restaurant) {
+                result.message = "No such restaurant";
+
+                return result;
+            }
+
             const restaurantMapped = {
-                name: restaurant?.getName(),
-                description: restaurant?.getDescription(),
-                location: restaurant?.getAddress().getCity().getName() + ', ' + restaurant?.getAddress().getStreetName() + ' ' + restaurant?.getAddress().getBuildingNumber(),
-                foodtype: restaurant?.getFoodtype().getName(),
-                menu: restaurant?.getMenu().getUrl(),
-                tablesMap: restaurant?.getTablemap(),
-                imgUrl: restaurant?.getImage()
+                name: restaurant.getName(),
+                description: restaurant.getDescription(),
+                location: restaurant.getAddress().getCity().getName() + ', ' + restaurant?.getAddress().getStreetName() + ' ' + restaurant?.getAddress().getBuildingNumber(),
+                foodtype: restaurant.getFoodtype().getName(),
+                menu: restaurant.getMenu().getUrl(),
+                imgUrl: restaurant.getImage()
             }
 
-            return {
-                restaurant: restaurantMapped
+            result = {
+                status: "Success",
+                data: restaurantMapped
             }
 
-        } catch (e) {
+            return result;
+        } catch (e: any) {
             res.status(500);
-            return {
-                error: e
+
+            Output.init().bg('red').fg("white").print(`[Endpoint][getRestaurant] Err: ${e.message}`);
+
+            result = {
+                status: "Failure",
+                errCode: "InternalError"
             }
+
+            return result;
         }
     }
 }

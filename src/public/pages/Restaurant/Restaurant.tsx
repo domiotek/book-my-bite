@@ -9,17 +9,17 @@ import menuImg from "../../assets/ui/menu.svg";
 import { AppContext } from '../../App';
 import RestaurantMenuModal from '../../modals/RestaurantMenuModal/RestaurantMenuModal';
 import MakeReservationModal from '../../modals/MakeReservationModal/MakeReservationModal';
-import { Restaurant } from '../../types/api';
+import { GetRestaurantEndpoint } from '../../types/api';
 import { useNavigate } from 'react-router-dom';
 
 export default function Restaurant() {
 	const [appContext, setAppContext] = useContext(AppContext);
-	const [restaurant, setRestaurant] = useState<Restaurant>();
+	const [restaurant, setRestaurant] = useState<GetRestaurantEndpoint.IDetailedRestaurantData>();
 
 	const navigate = useNavigate();
 
 	const showFoodMenuAction = useCallback(() => {
-		appContext.setModalContent(<RestaurantMenuModal images={["/ilustrations/mock_menu.jpg", "/ilustrations/restro_bar.jpg"]} />);
+		appContext.setModalContent(<RestaurantMenuModal images={["/ilustrations/mock_menu.jpg"]} />);
 	}, []);
 
 	const showReservationModalAction = useCallback(() => {
@@ -47,8 +47,8 @@ export default function Restaurant() {
 					console.log('Cannot reach restaurant response');
 				}
 
-				const data = await response.json();
-				setRestaurant(data.restaurant);
+				const data = await response.json() as GetRestaurantEndpoint.IResponse<"Success">;
+				setRestaurant(data.data);
 			} catch (e) {
 				console.log('Error in fetch restaurant operation: ', e);
 			}
