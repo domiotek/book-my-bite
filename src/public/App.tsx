@@ -21,7 +21,14 @@ interface IAppContext {
 	setModalContent: (modal: JSX.Element | null)=>void
 }
 
-export const AppContext = createContext<[IAppContext, (ctx: IAppContext)=>void]>([{isUserLoggedIn: false, isRestaurantManager: false, filters: {city: null, name: null, foodType: null}, selectedRestaurantID: null, setModalContent: ()=>{}},()=>{}]);
+export const AppContext = createContext<[IAppContext, (ctx: IAppContext)=>void]>([
+	{
+		isUserLoggedIn: false, 
+		isRestaurantManager: false, 
+		filters: {city: null, name: null, foodType: null}, 
+		selectedRestaurantID: null, 
+		setModalContent: ()=>{}
+	},()=>{}]);
 
 export default function App() {
 	const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
