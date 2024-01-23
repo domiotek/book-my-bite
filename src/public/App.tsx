@@ -28,7 +28,8 @@ export const AppContext = createContext<[IAppContext, (ctx: IAppContext)=>void]>
 		filters: {city: null, name: null, foodType: null}, 
 		selectedRestaurantID: null, 
 		setModalContent: ()=>{}
-	},()=>{}]);
+	},()=>{}
+]);
 
 export default function App() {
 	const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
